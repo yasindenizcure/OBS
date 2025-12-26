@@ -1,0 +1,256 @@
+﻿@model List<DenemeDers.Entity.Not>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Öğrenci Paneli // Akademik Sonuçlar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --bg-dark: #0f172a;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.1) 0px, transparent 50%);
+            color: #f8fafc;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Üst Bilgi Alanı */
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 0 10px;
+        }
+
+        .header-title h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .header-title p {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        .logout-btn {
+            text-decoration: none;
+            color: #fca5a5;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 10px 20px;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+            background: rgba(239, 68, 68, 0.05);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .logout-btn:hover {
+                background: rgba(239, 68, 68, 0.15);
+                border-color: var(--danger);
+                color: #fff;
+            }
+
+        /* Veri Tablosu */
+        .card-wrapper {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .grade-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .grade-table th {
+                text-align: left;
+                padding: 20px;
+                background: rgba(255, 255, 255, 0.02);
+                font-family: 'Outfit', sans-serif;
+                font-size: 0.8rem;
+                font-weight: 600;
+                color: #94a3b8;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .grade-table td {
+                padding: 20px;
+                border-bottom: 1px solid var(--border);
+                font-size: 0.95rem;
+                vertical-align: middle;
+            }
+
+            .grade-table tr:last-child td {
+                border-bottom: none;
+            }
+
+        .course-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .course-name {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .teacher-name {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        .score {
+            font-weight: 500;
+            color: #fff;
+            text-align: center;
+        }
+
+        .avg-container {
+            text-align: center;
+        }
+
+        .avg-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: var(--primary);
+            color: #fff;
+            font-weight: 600;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 10px;
+        }
+
+        .status-pass {
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .status-fail {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        /* Hover Efekti */
+        .grade-table tr:hover td {
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="panel-header">
+            <div class="header-title">
+                <h1>Akademik Karne</h1>
+                <p>Notlarınızı ve genel başarı durumunuzu buradan takip edebilirsiniz.</p>
+            </div>
+            <a href="/Login/Logout" class="logout-btn">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Güvenli Çıkış
+            </a>
+        </header>
+
+        <div class="card-wrapper">
+            <table class="grade-table">
+                <thead>
+                    <tr>
+                        <th>Ders ve Eğitmen</th>
+                        <th style="text-align:center">Vize</th>
+                        <th style="text-align:center">Final</th>
+                        <th style="text-align:center">Ortalama</th>
+                        <th style="text-align:center">Sonuç</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="course-info">
+                                    <span class="course-name">@item.Ders?.DersAdi</span>
+                                    <span class="teacher-name">@item.OgretimGorevlisi?.Ad @item.OgretimGorevlisi?.Soyad</span>
+                                </div>
+                            </td>
+                            <td class="score">@item.VizeNotu</td>
+                            <td class="score">@item.FinalNotu</td>
+                            <td class="avg-container">
+                                <span class="avg-badge">@item.Ortalama.ToString("0.00")</span>
+                            </td>
+                            <td>
+                                @if (item.Ortalama >= 50)
+                                {
+                                    <div class="status-badge status-pass">
+                                        <i class="fa-solid fa-check"></i> GEÇTİ
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="status-badge status-fail">
+                                        <i class="fa-solid fa-xmark"></i> KALDI
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

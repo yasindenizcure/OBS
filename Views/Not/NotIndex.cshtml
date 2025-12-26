@@ -1,0 +1,212 @@
+﻿@model List<DenemeDers.Entity.Not>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Not Paneli</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --primary: #4f46e5;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--card);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+        }
+
+        .header-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px;
+            color: #64748b;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        td {
+            padding: 18px 15px;
+            border-bottom: 1px solid #f8fafc;
+            font-size: 0.95rem;
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-weight: 800;
+            min-width: 55px;
+            text-align: center;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .btn-add {
+            text-decoration: none;
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+            .btn-add:hover {
+                opacity: 0.9;
+            }
+
+        /* İşlem Butonları Stili */
+        .actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .action-link {
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .edit-link {
+            color: var(--primary);
+        }
+
+        .delete-link {
+            color: var(--danger);
+        }
+
+        .action-link:hover {
+            text-decoration: underline;
+            .logout-btn
+
+        {
+            text-decoration: none;
+            background: transparent;
+            color: var(--danger);
+            border: 2px solid var(--danger);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logout-btn:hover {
+            background: var(--danger);
+            color: white;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+        }
+        
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-area">
+            <h1>Not Yönetimi</h1>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <a href="/Not/NotEkle" class="btn-add">+ Yeni Giriş</a>
+                <a href="/Login/Logout" class="logout-btn">
+                    <i class="fas fa-power-off"></i> GÜVENLİ ÇIKIŞ
+                </a>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Öğrenci</th>
+                    <th>Ders</th>
+                    <th>Hoca</th>
+                    <th style="text-align:center">Vize</th>
+                    <th style="text-align:center">Final</th>
+                    <th style="text-align:center">Ortalama</th>
+                    <th style="text-align:right">İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><strong>@item.Ogrenci?.Ad @item.Ogrenci?.Soyad</strong></td>
+                        <td>@item.Ders?.DersAdi</td>
+                        <td>@item.OgretimGorevlisi?.Ad @item.OgretimGorevlisi?.Soyad</td>
+                        <td style="text-align:center">@item.VizeNotu</td>
+                        <td style="text-align:center">@item.FinalNotu</td>
+                        <td style="text-align:center">
+                            @{
+                                double ort = item.Ortalama;
+                                string bg, color;
+                                if (ort < 50)
+                                {
+                                    bg = "#fee2e2"; color = "#991b1b";
+                                }
+                                else
+                                {
+                                    double sat = 65 + ((ort - 50) * 0.5);
+                                    double light = 92 - ((ort - 50) * 0.25);
+                                    bg = $"hsl(142, {sat}%, {light}%)";
+                                    color = "#064e3b";
+                                }
+                            }
+                            <span class="score-badge" style="background-color: @bg; color: @color;">
+                                @ort.ToString("0.00")
+                            </span>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <a href="/Not/NotGuncelle/@item.NotId" class="action-link edit-link">Düzenle</a>
+                                <a href="/Not/NotSil/@item.NotId"
+                                   class="action-link delete-link"
+                                   onclick="return confirm('Bu not kaydını silmek istediğinize emin misiniz?')">Sil</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

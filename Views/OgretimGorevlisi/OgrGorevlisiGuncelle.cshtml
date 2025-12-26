@@ -1,0 +1,257 @@
+﻿@model DenemeDers.Entity.OgretimGorevlisi
+@{
+    Layout = null;
+    ViewData["Title"] = "Veri Güncelleme Terminali";
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Temel Ayarlar --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            outline: none;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: #0b0c15;
+            color: #e0e0e0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* --- Arka Plan --- */
+        .background-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(130deg, #1a1a2e, #2e2100, #3d2900);
+            background-size: 400% 400%;
+            animation: gradientMove 15s ease infinite;
+        }
+
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: linear-gradient(rgba(255, 204, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 204, 0, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            perspective: 500px;
+        }
+
+        @@keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* --- Form Kutusu --- */
+        .form-container {
+            width: 90%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 204, 0, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(255, 204, 0, 0.15);
+            padding: 2.5rem;
+            transform: perspective(1000px) rotateY(5deg) scale(0.98);
+            animation: formEntry 0.8s ease-out forwards;
+            position: relative;
+        }
+
+        @@keyframes formEntry {
+            0% {
+                transform: perspective(1000px) rotateY(15deg) scale(0.8);
+                opacity: 0;
+            }
+
+            100% {
+                transform: perspective(1000px) rotateY(0deg) scale(1);
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            color: #ffcc00;
+            text-shadow: 0 0 15px rgba(255, 204, 0, 0.8);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: #ffaa00;
+            letter-spacing: 1px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 204, 0, 0.2);
+            border-radius: 8px;
+            color: #ffffff;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+            .form-control:focus {
+                border-color: #ffcc00;
+                box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+                background: rgba(255, 204, 0, 0.05);
+            }
+
+        /* --- DROPDOWN (SELECT) ÖZELLEŞTİRME --- */
+        select.form-control {
+            appearance: none;
+            cursor: pointer;
+            /* Sarı Ok ikonu (SVG - URL Encoded: #ffcc00) */
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23ffcc00" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+        }
+
+            /* Dropdown açıldığında seçeneklerin arka planı */
+            select.form-control option {
+                background-color: #1a1a2e; /* Koyu lacivert arka plan */
+                color: #ffcc00; /* Sarı yazı */
+                padding: 10px;
+            }
+
+        /* --- Buton --- */
+        .futuristic-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            background: linear-gradient(90deg, #ffaa00, #ffcc00);
+            border: none;
+            border-radius: 8px;
+            color: #0b0c15;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(255, 170, 0, 0.4);
+        }
+
+            .futuristic-btn:hover {
+                background: linear-gradient(90deg, #ffcc00, #ffaa00);
+                box-shadow: 0 0 30px rgba(255, 204, 0, 0.7);
+                transform: translateY(-2px);
+            }
+
+        /* Geri Dön Linki */
+        .btn-back {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+            .btn-back:hover {
+                color: #ffcc00;
+                text-shadow: 0 0 5px #ffcc00;
+            }
+
+    </style>
+</head>
+<body>
+
+    <div class="background-animation"></div>
+    <div class="grid-overlay"></div>
+
+    <div class="form-container">
+        <h1>GÜNCELLEME PANELİ</h1>
+
+        <form method="post" asp-action="OgrGorevlisiGuncelle" asp-controller="OgretimGorevlisi">
+
+            <input type="hidden" asp-for="OgretimGorevlisiId" />
+
+            <div class="form-group">
+                <label class="form-label">AD</label>
+                <input type="text" class="form-control" asp-for="Ad" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">SOYAD</label>
+                <input type="text" class="form-control" asp-for="Soyad" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">UNVAN</label>
+                <select class="form-control" asp-for="Unvan" required>
+                    <option value="">Seçiniz...</option>
+                    <option value="Arş. Gör.">Arş. Gör.</option>
+                    <option value="Öğr. Gör.">Öğr. Gör.</option>
+                    <option value="Dr. Öğr. Üyesi">Dr. Öğr. Üyesi</option>
+                    <option value="Doç. Dr.">Doç. Dr.</option>
+                    <option value="Prof. Dr.">Prof. Dr.</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">BÖLÜM</label>
+                <select class="form-control" asp-for="Bolum" required>
+                    <option value="">Seçiniz...</option>
+                    <option value="YBS">Yönetim Bilişim Sistemleri</option>
+                    <option value="UTİ">Uluslararası Ticaret ve İşletme</option>
+                    <option value="İşletme">İşletme</option>
+                </select>
+            </div>
+
+            <button type="submit" class="futuristic-btn">DEĞİŞİKLİKLERİ KAYDET</button>
+
+            <a href="/OgretimGorevlisi/OgrGorevlisi/" class="btn-back">← LİSTEYE DÖN</a>
+        </form>
+    </div>
+
+</body>
+</html>

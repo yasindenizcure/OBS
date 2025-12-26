@@ -1,0 +1,252 @@
+﻿@model DenemeDers.Entity.OgretimGorevlisi
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Yeni Akademisyen Kaydı";
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Renk Paleti (Neon Mor) --- */
+        :root {
+            --primary-neon: #d500f9; /* Neon Mor */
+            --secondary-neon: #aa00ff; /* Koyu Mor */
+            --bg-dark: #050505;
+            --text-color: #e0e0e0;
+            --glass-bg: rgba(20, 10, 35, 0.7); /* Morumsu koyu cam */
+        }
+
+        /* --- Genel Ayarlar --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            outline: none;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- Arka Plan Animasyonu (Mor Grid) --- */
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            /* Grid rengi mor yapıldı */
+            background: linear-gradient(rgba(213, 0, 249, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(213, 0, 249, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            transform: perspective(800px) rotateX(20deg) scale(1.2);
+            animation: gridFloat 20s infinite linear;
+        }
+
+        @@keyframes gridFloat {
+            0% {
+                transform: perspective(800px) rotateX(20deg) scale(1.2) translateY(0);
+            }
+
+            50% {
+                transform: perspective(800px) rotateX(20deg) scale(1.2) translateY(-20px);
+            }
+
+            100% {
+                transform: perspective(800px) rotateX(20deg) scale(1.2) translateY(0);
+            }
+        }
+
+        /* --- Form Kartı --- */
+        .form-card {
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(213, 0, 249, 0.3); /* Mor sınır */
+            border-radius: 15px;
+            box-shadow: 0 0 50px rgba(213, 0, 249, 0.1); /* Mor gölge */
+            position: relative;
+        }
+
+            /* Köşe Süslemeleri */
+            .form-card::before {
+                content: '';
+                position: absolute;
+                top: -2px;
+                left: -2px;
+                width: 30px;
+                height: 30px;
+                border-top: 3px solid var(--primary-neon);
+                border-left: 3px solid var(--primary-neon);
+                border-radius: 10px 0 0 0;
+            }
+
+            .form-card::after {
+                content: '';
+                position: absolute;
+                bottom: -2px;
+                right: -2px;
+                width: 30px;
+                height: 30px;
+                border-bottom: 3px solid var(--primary-neon);
+                border-right: 3px solid var(--primary-neon);
+                border-radius: 0 0 10px 0;
+            }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            color: var(--primary-neon);
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(213, 0, 249, 0.5);
+        }
+
+        /* --- Form Elemanları --- */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            color: #b388ff; /* Etiket rengi açık mor */
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .input-cyber {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
+            border-radius: 5px;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+            .input-cyber:focus {
+                border-color: var(--primary-neon);
+                box-shadow: 0 0 15px rgba(213, 0, 249, 0.2);
+                background: rgba(213, 0, 249, 0.05);
+            }
+
+        /* Select için özel stil - Ok rengi mor'a çevrildi (URL Encoded: %23d500f9) */
+        select.input-cyber {
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23d500f9" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            cursor: pointer;
+        }
+
+            select.input-cyber option {
+                background-color: #1a052e; /* Option arka planı koyu mor */
+                color: #fff;
+            }
+
+        /* --- Butonlar --- */
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            font-size: 1rem;
+            color: #fff;
+            background: linear-gradient(90deg, var(--primary-neon), var(--secondary-neon));
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+            .btn-submit:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 0 25px rgba(213, 0, 249, 0.6);
+            }
+
+        .btn-back {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+            .btn-back:hover {
+                color: var(--primary-neon);
+            }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-grid"></div>
+
+    <div class="form-card">
+        <h2>AKADEMİSYEN KAYDI</h2>
+
+        <form method="post" action="/OgretimGorevlisi/OgrGorevlisiKayit">
+
+            <div class="form-group">
+                <label>ADI</label>
+                <input asp-for="Ad" class="input-cyber" placeholder="Örn: Ahmet" required />
+            </div>
+
+            <div class="form-group">
+                <label>SOYADI</label>
+                <input asp-for="Soyad" class="input-cyber" placeholder="Örn: Yılmaz" required />
+            </div>
+
+            <div class="form-group">
+                <label>UNVANI</label>
+                <select asp-for="Unvan" class="input-cyber">
+                    <option value="">Seçiniz...</option>
+                    <option value="Arş. Gör.">Arş. Gör.</option>
+                    <option value="Öğr. Gör.">Öğr. Gör.</option>
+                    <option value="Dr. Öğr. Üyesi">Dr. Öğr. Üyesi</option>
+                    <option value="Doç. Dr.">Doç. Dr.</option>
+                    <option value="Prof. Dr.">Prof. Dr.</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>BÖLÜMÜ</label>
+                <input asp-for="Bolum" class="input-cyber" placeholder="Örn: Bilgisayar Mühendisliği" />
+            </div>
+
+            <button type="submit" class="btn-submit">PERSONELİ EKLE</button>
+
+            <a href="/OgretimGorevlisi/OgrGorevlisi/" class="btn-back">← Listeye Geri Dön</a>
+        </form>
+    </div>
+
+</body>
+</html>

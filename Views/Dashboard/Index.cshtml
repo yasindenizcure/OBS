@@ -1,0 +1,180 @@
+﻿@using System.Security.Claims
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <title>Siber Üniversite - Kontrol Paneli</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --cyan: #00d4ff;
+            --gold: #ffcc00;
+            --magenta: #d500f9;
+            --red: #ff003c;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: #050505;
+            color: #fff;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bg-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: radial-gradient(circle at center, #1b2735 0%, #08090a 100%);
+        }
+
+        .cyber-logout {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            text-decoration: none;
+            color: var(--red);
+            border: 1px solid var(--red);
+            padding: 10px 20px;
+            font-family: 'Orbitron';
+            font-size: 0.8rem;
+            z-index: 100;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 50px;
+            z-index: 10;
+        }
+
+        h1 {
+            font-family: 'Orbitron';
+            font-size: 3rem;
+            letter-spacing: 5px;
+            text-shadow: 0 0 20px var(--cyan);
+        }
+
+        .dashboard-container {
+            display: flex;
+            gap: 20px;
+            z-index: 10;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .card {
+            width: 250px;
+            height: 300px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #fff;
+            transition: 0.3s;
+        }
+
+            .card:hover {
+                transform: translateY(-10px);
+                background: rgba(255,255,255,0.1);
+                border-color: var(--cyan);
+                box-shadow: 0 0 30px rgba(0,212,255,0.2);
+            }
+
+            .card i {
+                font-size: 3.5rem;
+                margin-bottom: 20px;
+            }
+
+            .card h2 {
+                font-family: 'Orbitron';
+                font-size: 1rem;
+                margin-bottom: 10px;
+            }
+
+            .card p {
+                font-size: 0.8rem;
+                text-align: center;
+                opacity: 0.6;
+                padding: 0 15px;
+            }
+
+        .c-student {
+            border-bottom: 4px solid var(--cyan);
+        }
+
+            .c-student i {
+                color: var(--cyan);
+            }
+
+        .c-teacher {
+            border-bottom: 4px solid var(--magenta);
+        }
+
+            .c-teacher i {
+                color: var(--magenta);
+            }
+
+        .c-lesson {
+            border-bottom: 4px solid var(--gold);
+        }
+
+            .c-lesson i {
+                color: var(--gold);
+            }
+    </style>
+</head>
+<body>
+    <div class="bg-video"></div>
+    <a href="/Login/Logout" class="cyber-logout"><i class="fas fa-power-off"></i> ÇIKIŞ</a>
+
+    <div class="header-section">
+        <h1>MERKEZİ <span>KONTROL</span></h1>
+        <p style="color:var(--cyan)">SİSTEM AKTİF // ROL: @User.FindFirst(ClaimTypes.Role)?.Value</p>
+    </div>
+
+    <div class="dashboard-container">
+        @{
+            var role = User.FindFirst(ClaimTypes.Role)?.Value?.ToLower().Trim();
+        }
+
+        @if (role == "admin" || role == "memur")
+        {
+            <a href="/Ogrenci/Index" class="card c-student">
+                <i class="fas fa-user-graduate"></i>
+                <h2>ÖĞRENCİLER</h2>
+                <p>Kayıt, silme ve güncelleme paneli.</p>
+            </a>
+
+            <a href="/OgretimGorevlisi/OgrGorevlisi" class="card c-teacher">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <h2>HOCALAR</h2>
+                <p>Hoca ekle, sil ve giriş yetkisi ver.</p>
+            </a>
+
+            <a href="/Ders/Dersler" class="card c-lesson">
+                <i class="fas fa-book"></i>
+                <h2>DERSLER</h2>
+                <p>Müfredat ve hoca atama yönetimi.</p>
+            </a>
+        }
+    </div>
+</body>
+</html>

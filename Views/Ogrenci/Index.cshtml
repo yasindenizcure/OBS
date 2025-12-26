@@ -1,0 +1,205 @@
+﻿@model List<DenemeDers.Entity.Ogrenci>
+
+@{
+    ViewData["Title"] = "Öğrenci Listesi";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Öğrenci Paneli</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #f4f7f6; /* Çok hafif sıcak gri */
+            --card-bg: #ffffff;
+            --primary-accent: #6366f1; /* Şık bir indigo */
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.01);
+            padding: 40px;
+        }
+
+        /* --- Header Bölümü --- */
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .btn-create {
+            text-decoration: none;
+            background-color: var(--primary-accent);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+
+            .btn-create:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
+                filter: brightness(1.1);
+            }
+
+        /* --- Tablo Tasarımı --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            text-align: left;
+            padding: 15px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #f8fafc;
+            transition: background 0.2s;
+        }
+
+            tbody tr:hover {
+                background-color: #fafbff;
+            }
+
+        tbody td {
+            padding: 18px 15px;
+            font-size: 0.9rem;
+        }
+
+        /* Veri Stilleri */
+        .student-name {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .dept-tag {
+            background: #eef2ff;
+            color: #4338ca;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* --- İşlem Butonları --- */
+        .btn-action {
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-edit {
+            color: var(--primary-accent);
+            background: rgba(99, 102, 241, 0.08);
+        }
+
+            .btn-edit:hover {
+                background: var(--primary-accent);
+                color: white;
+            }
+
+        .btn-delete {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.08);
+        }
+
+            .btn-delete:hover {
+                background: #ef4444;
+                color: white;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-section">
+            <h1>Öğrenci Listesi</h1>
+            <a asp-action="Kayit" class="btn-create">Yeni Kayıt</a>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Öğrenci</th>
+                    <th>Yaş</th>
+                    <th>Sınıf</th>
+                    <th>No</th>
+                    <th>Bölüm</th>
+                    <th style="text-align: right;">Yönetim</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ogr in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="student-name">@ogr.Ad @ogr.Soyad</div>
+                        </td>
+                        <td>@ogr.Yas</td>
+                        <td>@ogr.Sinif</td>
+                        <td style="color: var(--text-muted)">#@ogr.OgrNo</td>
+                        <td>
+                            <span class="dept-tag">@ogr.Bolum</span>
+                        </td>
+                        <td style="text-align: right;">
+                            <a asp-action="Guncelle" asp-route-id="@ogr.OgrenciId" class="btn-action btn-edit">Düzenle</a>
+                            <a asp-action="Sil" asp-route-id="@ogr.OgrenciId" class="btn-action btn-delete">Sil</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

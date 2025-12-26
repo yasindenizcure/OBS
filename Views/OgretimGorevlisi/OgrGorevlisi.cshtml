@@ -1,0 +1,287 @@
+﻿@model List<DenemeDers.Entity.OgretimGorevlisi>
+
+@{
+    ViewData["Title"] = "Akademik Kadro";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Temel Ayarlar --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: #050505;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Arka Plan */
+        .bg-anim {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: radial-gradient(circle at center, #18002e 0%, #000000 100%);
+        }
+
+        .grid-floor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: linear-gradient(rgba(213, 0, 249, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(213, 0, 249, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: perspective(500px) rotateX(20deg);
+            opacity: 0.6;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @@keyframes gridMove {
+            0% {
+                background-position: 0 0;
+            }
+
+            100% {
+                background-position: 0 50px;
+            }
+        }
+
+        /* Panel Kartı */
+        .panel-container {
+            width: 90%;
+            max-width: 1200px;
+            background: rgba(20, 10, 35, 0.65);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(213, 0, 249, 0.3);
+            border-radius: 12px;
+            box-shadow: 0 0 40px rgba(213, 0, 249, 0.15);
+            padding: 2.5rem;
+            margin: 2rem 0;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            font-size: 2.5rem;
+            color: #d500f9;
+            text-shadow: 0 0 15px rgba(213, 0, 249, 0.6);
+            margin-bottom: 30px;
+            letter-spacing: 3px;
+        }
+
+        .top-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .btn-new-record {
+            font-family: 'Orbitron', sans-serif;
+            text-decoration: none;
+            padding: 10px 25px;
+            color: #fff;
+            border: 1px solid #d500f9;
+            background: rgba(213, 0, 249, 0.1);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .btn-new-record:hover {
+                background: #d500f9;
+                color: #fff;
+                box-shadow: 0 0 20px #d500f9;
+                transform: translateY(-2px);
+            }
+
+        /* Tablo Stilleri */
+        .cyber-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+            .cyber-table th {
+                font-family: 'Orbitron', sans-serif;
+                text-align: left;
+                color: #b388ff;
+                padding: 15px;
+                font-size: 1rem;
+                letter-spacing: 1px;
+                border-bottom: 2px solid #b388ff;
+            }
+
+            .cyber-table tbody tr {
+                background: rgba(255, 255, 255, 0.03);
+                transition: 0.3s;
+            }
+
+                .cyber-table tbody tr:hover {
+                    background: rgba(213, 0, 249, 0.15);
+                    transform: scale(1.01);
+                    box-shadow: 0 0 15px rgba(213, 0, 249, 0.3);
+                }
+
+            .cyber-table td {
+                padding: 15px;
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                font-size: 1.1rem;
+                vertical-align: middle;
+            }
+
+                .cyber-table td:first-child {
+                    border-left: 1px solid rgba(255, 255, 255, 0.05);
+                    border-top-left-radius: 8px;
+                    border-bottom-left-radius: 8px;
+                    padding-left: 20px; /* İlk sütun için biraz boşluk */
+                }
+
+                .cyber-table td:last-child {
+                    border-right: 1px solid rgba(255, 255, 255, 0.05);
+                    border-top-right-radius: 8px;
+                    border-bottom-right-radius: 8px;
+                }
+
+        /* Unvan Badge Stilleri */
+        .badge-unvan {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 0.85rem;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+        }
+
+        /* Butonlar */
+        .btn-action {
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            margin-left: 5px;
+            transition: 0.3s;
+            border: 1px solid transparent;
+            display: inline-block;
+        }
+
+        .btn-edit-table {
+            color: #ffaa00;
+            background: rgba(255, 170, 0, 0.1);
+            border-color: #ffaa00;
+        }
+
+            .btn-edit-table:hover {
+                background: #ffaa00;
+                color: #000;
+                box-shadow: 0 0 10px #ffaa00;
+            }
+
+        .btn-del-table {
+            color: #ff0055;
+            background: rgba(255, 0, 85, 0.1);
+            border-color: #ff0055;
+        }
+
+            .btn-del-table:hover {
+                background: #ff0055;
+                color: #fff;
+                box-shadow: 0 0 10px #ff0055;
+            }
+
+        .no-data {
+            text-align: center;
+            padding: 2rem;
+            color: #ff3333;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-anim"></div>
+    <div class="grid-floor"></div>
+
+    <div class="panel-container">
+        <h1>AKADEMİK KADRO</h1>
+
+        <div class="top-actions">
+            <a href="/OgretimGorevlisi/OgrGorevlisiKayit" class="btn-new-record">
+                <span>+</span> YENİ HOCA EKLE
+            </a>
+        </div>
+
+        <table class="cyber-table">
+            <thead>
+                <tr>
+                    <th>ADI</th>
+                    <th>SOYADI</th>
+                    <th>BÖLÜMÜ</th>
+                    <th>UNVAN</th>
+                    <th style="text-align: right;">İŞLEMLER</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var hoca in Model)
+                    {
+                        <tr>
+                            <td style="color: #fff; font-weight: 500;">@hoca.Ad</td>
+                            <td style="color: #fff; font-weight: 500;">@hoca.Soyad</td>
+                            <td style="color: #bbb;">@hoca.Bolum</td>
+                            <td style="color: #bbb;">@hoca.Unvan</td>
+                            <td style="text-align: right;">
+                                <a href="/OgretimGorevlisi/OgrGorevlisiGuncelle/@hoca.OgretimGorevlisiId" class="btn-action btn-edit-table">
+                                    DÜZENLE
+                                </a>
+                                <a href="/OgretimGorevlisi/OgrGorevlisiSil/@hoca.OgretimGorevlisiId"
+                                   class="btn-action btn-del-table"
+                                   onclick="return confirm('@hoca.Ad @hoca.Soyad kaydını silmek istediğinize emin misiniz?');">
+                                    SİL
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="no-data">
+                            SİSTEMDE KAYITLI ÖĞRETİM GÖREVLİSİ BULUNAMADI.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

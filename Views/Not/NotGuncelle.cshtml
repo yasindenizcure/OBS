@@ -1,0 +1,200 @@
+﻿@model DenemeDers.Entity.Not
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Not Güncelleme // Akademik Sistem</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-dark: #0f172a;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.1) 0px, transparent 50%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f8fafc;
+            padding: 20px;
+        }
+
+        .update-card {
+            width: 100%;
+            max-width: 500px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+            .header h2 {
+                font-family: 'Outfit', sans-serif;
+                font-size: 1.8rem;
+                color: #fff;
+                margin-bottom: 10px;
+            }
+
+            .header p {
+                font-size: 0.9rem;
+                color: var(--text-muted);
+            }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+            .form-group label {
+                display: block;
+                font-size: 0.85rem;
+                color: #cbd5e1;
+                margin-bottom: 8px;
+                margin-left: 4px;
+            }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+            .input-wrapper i {
+                position: absolute;
+                left: 16px;
+                color: #64748b;
+            }
+
+        input, select {
+            width: 100%;
+            padding: 12px 16px 12px 45px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+            /* Readonly (değiştirilemez) alanlar için stil */
+            input[readonly] {
+                background: rgba(255, 255, 255, 0.02);
+                color: #64748b;
+                cursor: not-allowed;
+            }
+
+            input:focus {
+                outline: none;
+                border-color: var(--primary);
+                box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px;
+            border-radius: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .btn-save {
+            background: var(--primary);
+            border: none;
+            color: white;
+        }
+
+            .btn-save:hover {
+                background: var(--primary-hover);
+                transform: translateY(-1px);
+            }
+
+        .btn-cancel {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: #fff;
+        }
+
+            .btn-cancel:hover {
+                background: rgba(255, 255, 255, 0.1);
+            }
+    </style>
+</head>
+<body>
+
+    <div class="update-card">
+        <div class="header">
+            <h2>Not Güncelle</h2>
+            <p>Öğrenci başarısını yeniden değerlendirin.</p>
+        </div>
+
+        <form method="post">
+            @Html.HiddenFor(x => x.NotId)
+            @Html.HiddenFor(x => x.OgrenciId)
+            @Html.HiddenFor(x => x.DersId)
+            @Html.HiddenFor(x => x.OgretimGorevlisiId)
+
+            <div class="form-group">
+                <label>Vize Notu</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-pen-clip"></i>
+                    <input type="number" name="VizeNotu" value="@Model.VizeNotu" min="0" max="100" required />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Final Notu</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <input type="number" name="FinalNotu" value="@Model.FinalNotu" min="0" max="100" required />
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <a href="/Not/NotIndex" class="btn btn-cancel">İptal Et</a>
+                <button type="submit" class="btn btn-save">Değişiklikleri Kaydet</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
