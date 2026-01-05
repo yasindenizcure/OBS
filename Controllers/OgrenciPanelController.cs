@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 namespace DenemeDers.Controllers
 {
-    [Authorize(Roles = "Ogrenci")] // Sadece öğrencilerin girmesine izin ver
+    [Authorize(Roles = "Ogrenci")]
     public class OgrenciPanelController : Controller
     {
         private readonly ContextDb _context;

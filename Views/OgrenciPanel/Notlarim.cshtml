@@ -1,7 +1,10 @@
-﻿@model List<DenemeDers.Entity.Not>
+﻿@using System.Security.Claims
+@model List<DenemeDers.Entity.Not>
 
 @{
     Layout = null;
+    var adSoyad = User.Identity.Name;
+    var ogrenciId = User.FindFirst("UserId")?.Value;
 }
 
 <!DOCTYPE html>
@@ -43,11 +46,50 @@
             margin: 0 auto;
         }
 
-        /* Üst Bilgi Alanı */
+        .user-profile-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 16px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            width: fit-content;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+            .user-details .name {
+                font-size: 0.85rem;
+                font-weight: 600;
+                color: #fff;
+            }
+
+            .user-details .id {
+                font-size: 0.7rem;
+                color: #94a3b8;
+            }
+
         .panel-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             margin-bottom: 40px;
             padding: 0 10px;
         }
@@ -86,7 +128,6 @@
                 color: #fff;
             }
 
-        /* Veri Tablosu */
         .card-wrapper {
             background: var(--glass);
             backdrop-filter: blur(20px);
@@ -110,26 +151,14 @@
                 font-weight: 600;
                 color: #94a3b8;
                 text-transform: uppercase;
-                letter-spacing: 1px;
                 border-bottom: 1px solid var(--border);
             }
 
             .grade-table td {
                 padding: 20px;
                 border-bottom: 1px solid var(--border);
-                font-size: 0.95rem;
                 vertical-align: middle;
             }
-
-            .grade-table tr:last-child td {
-                border-bottom: none;
-            }
-
-        .course-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
 
         .course-name {
             font-weight: 600;
@@ -142,12 +171,7 @@
         }
 
         .score {
-            font-weight: 500;
             color: #fff;
-            text-align: center;
-        }
-
-        .avg-container {
             text-align: center;
         }
 
@@ -158,8 +182,6 @@
             color: #fff;
             font-weight: 600;
             border-radius: 10px;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
         }
 
         .status-badge {
@@ -184,17 +206,21 @@
             color: #f87171;
             border: 1px solid rgba(239, 68, 68, 0.2);
         }
-
-        /* Hover Efekti */
-        .grade-table tr:hover td {
-            background: rgba(255, 255, 255, 0.01);
-        }
-
     </style>
 </head>
 <body>
 
     <div class="container">
+        <div class="user-profile-badge">
+            <div class="user-avatar">
+                <i class="fa-solid fa-user-graduate"></i>
+            </div>
+            <div class="user-details">
+                <span class="name">@adSoyad</span>
+                <span class="id">Öğrenci Sistem ID: #@ogrenciId</span>
+            </div>
+        </div>
+
         <header class="panel-header">
             <div class="header-title">
                 <h1>Akademik Karne</h1>
@@ -228,7 +254,7 @@
                             </td>
                             <td class="score">@item.VizeNotu</td>
                             <td class="score">@item.FinalNotu</td>
-                            <td class="avg-container">
+                            <td class="avg-container" style="text-align:center">
                                 <span class="avg-badge">@item.Ortalama.ToString("0.00")</span>
                             </td>
                             <td>

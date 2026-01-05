@@ -1,0 +1,163 @@
+﻿@model DenemeDers.Entity.Bolum
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bölüm Bilgilerini Revize Et</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --edit-neon: #ffea00;
+            --primary-neon: #d500f9;
+            --bg-dark: #050505;
+            --glass-bg: rgba(25, 20, 10, 0.8);
+            --text-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            background-image: radial-gradient(circle at 50% 50%, #2e2805 0%, #050505 100%);
+        }
+
+        .form-card {
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 234, 0, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(255, 234, 0, 0.1);
+            position: relative;
+        }
+
+            .form-card::after {
+                content: 'EDIT_MODE_v2.0';
+                position: absolute;
+                top: 10px;
+                right: 15px;
+                font-family: 'Orbitron', sans-serif;
+                font-size: 10px;
+                color: var(--edit-neon);
+                letter-spacing: 2px;
+            }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            color: var(--edit-neon);
+            margin-bottom: 35px;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(255, 234, 0, 0.5);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            color: var(--edit-neon);
+            margin-bottom: 10px;
+        }
+
+        .input-cyber {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 234, 0, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            transition: 0.3s;
+        }
+
+            .input-cyber:focus {
+                border-color: var(--edit-neon);
+                box-shadow: 0 0 15px rgba(255, 234, 0, 0.2);
+                outline: none;
+            }
+
+        .id-badge {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn-update {
+            padding: 15px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            color: #000;
+            background: var(--edit-neon);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.4s;
+            text-transform: uppercase;
+        }
+
+            .btn-update:hover {
+                box-shadow: 0 0 30px rgba(255, 234, 0, 0.6);
+                transform: scale(1.02);
+            }
+
+        .btn-cancel {
+            text-align: center;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-card">
+        <h2><i class="fas fa-sync-alt"></i> BÖLÜMÜ GÜNCELLE</h2>
+
+        <form method="post" asp-action="BolumGuncelle" asp-controller="Bolum">
+
+            <input type="hidden" asp-for="BolumId" />
+
+            <span class="id-badge">Sistem ID: #@Model.BolumId</span>
+
+            <div class="form-group">
+                <label>BÖLÜMÜN YENİ ADI</label>
+                <input asp-for="BolumAdi" class="input-cyber" required />
+                <span asp-validation-for="BolumAdi" style="color:#ff1744; font-size:0.8rem;"></span>
+            </div>
+
+            <div class="btn-group">
+                <button type="submit" class="btn-update">DEĞİŞİKLİKLERİ UYGULA</button>
+                <a href="/Bolum/Index" class="btn-cancel">Vazgeç ve Listeye Dön</a>
+            </div>
+
+        </form>
+    </div>
+
+</body>
+</html>

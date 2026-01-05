@@ -12,9 +12,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* --- Temel Ayarlar --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -33,7 +33,6 @@
             overflow-x: hidden;
         }
 
-        /* Arka Plan */
         .bg-anim {
             position: fixed;
             top: 0;
@@ -59,53 +58,86 @@
         }
 
         @@keyframes gridMove {
-            0% {
-                background-position: 0 0;
-            }
+            0%
 
-            100% {
-                background-position: 0 50px;
-            }
+        {
+            background-position: 0 0;
         }
 
-        /* Panel Kartı */
+        100% {
+            background-position: 0 50px;
+        }
+
+        }
+
         .panel-container {
-            width: 90%;
+            width: 95%;
             max-width: 1200px;
-            background: rgba(20, 10, 35, 0.65);
-            backdrop-filter: blur(12px);
+            background: rgba(20, 10, 35, 0.75);
+            backdrop-filter: blur(15px);
             border: 1px solid rgba(213, 0, 249, 0.3);
             border-radius: 12px;
             box-shadow: 0 0 40px rgba(213, 0, 249, 0.15);
             padding: 2.5rem;
             margin: 2rem 0;
+            position: relative;
         }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(213, 0, 249, 0.2);
+        }
+
+        .logout-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-logout {
+            font-family: 'Orbitron', sans-serif;
+            text-decoration: none;
+            padding: 8px 18px;
+            color: #ff0055;
+            border: 1px solid #ff0055;
+            background: rgba(255, 0, 85, 0.05);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .btn-logout:hover {
+                background: #ff0055;
+                color: #fff;
+                box-shadow: 0 0 15px #ff0055;
+                transform: scale(1.05);
+            }
 
         h1 {
             font-family: 'Orbitron', sans-serif;
-            text-align: center;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             color: #d500f9;
             text-shadow: 0 0 15px rgba(213, 0, 249, 0.6);
-            margin-bottom: 30px;
             letter-spacing: 3px;
-        }
-
-        .top-actions {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 20px;
         }
 
         .btn-new-record {
             font-family: 'Orbitron', sans-serif;
             text-decoration: none;
-            padding: 10px 25px;
-            color: #fff;
-            border: 1px solid #d500f9;
-            background: rgba(213, 0, 249, 0.1);
+            padding: 10px 20px;
+            color: #00e5ff;
+            border: 1px solid #00e5ff;
+            background: rgba(0, 229, 255, 0.1);
             border-radius: 4px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: 0.3s;
             display: flex;
             align-items: center;
@@ -113,13 +145,11 @@
         }
 
             .btn-new-record:hover {
-                background: #d500f9;
-                color: #fff;
-                box-shadow: 0 0 20px #d500f9;
-                transform: translateY(-2px);
+                background: #00e5ff;
+                color: #000;
+                box-shadow: 0 0 20px #00e5ff;
             }
 
-        /* Tablo Stilleri */
         .cyber-table {
             width: 100%;
             border-collapse: separate;
@@ -131,8 +161,7 @@
                 text-align: left;
                 color: #b388ff;
                 padding: 15px;
-                font-size: 1rem;
-                letter-spacing: 1px;
+                font-size: 0.9rem;
                 border-bottom: 2px solid #b388ff;
             }
 
@@ -142,59 +171,53 @@
             }
 
                 .cyber-table tbody tr:hover {
-                    background: rgba(213, 0, 249, 0.15);
+                    background: rgba(213, 0, 249, 0.1);
                     transform: scale(1.01);
-                    box-shadow: 0 0 15px rgba(213, 0, 249, 0.3);
                 }
 
             .cyber-table td {
                 padding: 15px;
+                color: #fff;
+                font-size: 1rem;
                 border-top: 1px solid rgba(255, 255, 255, 0.05);
-                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-                font-size: 1.1rem;
-                vertical-align: middle;
             }
 
-                .cyber-table td:first-child {
-                    border-left: 1px solid rgba(255, 255, 255, 0.05);
-                    border-top-left-radius: 8px;
-                    border-bottom-left-radius: 8px;
-                    padding-left: 20px; /* İlk sütun için biraz boşluk */
-                }
-
-                .cyber-table td:last-child {
-                    border-right: 1px solid rgba(255, 255, 255, 0.05);
-                    border-top-right-radius: 8px;
-                    border-bottom-right-radius: 8px;
-                }
-
-        /* Unvan Badge Stilleri */
-        .badge-unvan {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 3px;
-            font-size: 0.85rem;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: bold;
-        }
-
-        /* Butonlar */
         .btn-action {
             text-decoration: none;
             padding: 6px 12px;
             border-radius: 4px;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.75rem;
-            margin-left: 5px;
+            font-size: 0.7rem;
             transition: 0.3s;
-            border: 1px solid transparent;
-            display: inline-block;
+            margin-left: 5px;
         }
 
+        .btn-back-dashboard {
+            font-family: 'Orbitron', sans-serif;
+            text-decoration: none;
+            padding: 8px 18px;
+            color: #d500f9;
+            border: 1px solid #d500f9;
+            background: rgba(213, 0, 249, 0.05);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .btn-back-dashboard:hover {
+                background: #d500f9;
+                color: #000;
+                box-shadow: 0 0 15px #d500f9;
+                transform: scale(1.05);
+            }
         .btn-edit-table {
             color: #ffaa00;
-            background: rgba(255, 170, 0, 0.1);
-            border-color: #ffaa00;
+            border: 1px solid #ffaa00;
+            background: rgba(255, 170, 0, 0.05);
         }
 
             .btn-edit-table:hover {
@@ -205,8 +228,8 @@
 
         .btn-del-table {
             color: #ff0055;
-            background: rgba(255, 0, 85, 0.1);
-            border-color: #ff0055;
+            border: 1px solid #ff0055;
+            background: rgba(255, 0, 85, 0.05);
         }
 
             .btn-del-table:hover {
@@ -214,14 +237,6 @@
                 color: #fff;
                 box-shadow: 0 0 10px #ff0055;
             }
-
-        .no-data {
-            text-align: center;
-            padding: 2rem;
-            color: #ff3333;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
-        }
     </style>
 </head>
 <body>
@@ -230,12 +245,21 @@
     <div class="grid-floor"></div>
 
     <div class="panel-container">
-        <h1>AKADEMİK KADRO</h1>
-
-        <div class="top-actions">
-            <a href="/OgretimGorevlisi/OgrGorevlisiKayit" class="btn-new-record">
-                <span>+</span> YENİ HOCA EKLE
+        <div class="top-nav">
+            <a href="/Dashboard/Index" class="btn-back-dashboard">
+                <i class="fas fa-chevron-left"></i> GERİ DÖN
             </a>
+
+            <h1>AKADEMİK KADRO</h1>
+
+            <div class="logout-wrapper">
+                <a href="/OgretimGorevlisi/OgrGorevlisiKayit" class="btn-new-record">
+                    <i class="fas fa-plus"></i> YENİ HOCA
+                </a>
+                <a href="/Login/Logout" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> GÜVENLİ ÇIKIŞ
+                </a>
+            </div>
         </div>
 
         <table class="cyber-table">
@@ -254,19 +278,13 @@
                     @foreach (var hoca in Model)
                     {
                         <tr>
-                            <td style="color: #fff; font-weight: 500;">@hoca.Ad</td>
-                            <td style="color: #fff; font-weight: 500;">@hoca.Soyad</td>
+                            <td>@hoca.Ad</td>
+                            <td>@hoca.Soyad</td>
                             <td style="color: #bbb;">@hoca.Bolum</td>
                             <td style="color: #bbb;">@hoca.Unvan</td>
                             <td style="text-align: right;">
-                                <a href="/OgretimGorevlisi/OgrGorevlisiGuncelle/@hoca.OgretimGorevlisiId" class="btn-action btn-edit-table">
-                                    DÜZENLE
-                                </a>
-                                <a href="/OgretimGorevlisi/OgrGorevlisiSil/@hoca.OgretimGorevlisiId"
-                                   class="btn-action btn-del-table"
-                                   onclick="return confirm('@hoca.Ad @hoca.Soyad kaydını silmek istediğinize emin misiniz?');">
-                                    SİL
-                                </a>
+                                <a href="/OgretimGorevlisi/OgrGorevlisiGuncelle/@hoca.OgretimGorevlisiId" class="btn-action btn-edit-table">DÜZENLE</a>
+                                <a href="/OgretimGorevlisi/OgrGorevlisiSil/@hoca.OgretimGorevlisiId" class="btn-action btn-del-table" onclick="return confirm('@hoca.Ad @hoca.Soyad kaydını silmek istediğinize emin misiniz?');">SİL</a>
                             </td>
                         </tr>
                     }
@@ -274,9 +292,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="5" class="no-data">
-                            SİSTEMDE KAYITLI ÖĞRETİM GÖREVLİSİ BULUNAMADI.
-                        </td>
+                        <td colspan="5" style="text-align: center; padding: 3rem; color: #ff0055; font-family: 'Orbitron';">SİSTEMDE KAYITLI VERİ BULUNAMADI.</td>
                     </tr>
                 }
             </tbody>

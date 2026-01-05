@@ -27,6 +27,12 @@ namespace DenemeDers.Controllers
 
             if (user != null)
             {
+                var hoca = _context.OgretimGorevlileri.FirstOrDefault(x => x.AppUserId == user.AppUserId);
+                if (hoca != null)
+                {
+                    HttpContext.Session.SetInt32("HocaId", hoca.OgretimGorevlisiId);
+                }
+
                 var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, user.AdSoyad),
@@ -46,16 +52,14 @@ namespace DenemeDers.Controllers
                 {
                     return RedirectToAction("NotIndex", "Not");
                 }
+                else if (userRole == "ogrenci")
+                {
+                    return RedirectToAction("Notlarim", "OgrenciPanel");
+                }
                 else if (userRole == "admin" || userRole == "memur")
                 {
                     return RedirectToAction("Index", "Dashboard");
                 }
-
-                if (userRole == "ogrenci")
-                {
-                    return RedirectToAction("Notlarim", "OgrenciPanel");
-                }
-                return RedirectToAction("Index", "Dashboard");
             }
 
             ViewBag.Error = "Kullanıcı adı veya şifre hatalı!";

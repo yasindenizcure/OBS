@@ -77,16 +77,29 @@ namespace DenemeDers.Controllers
         }
 
         [HttpPost]
-        public IActionResult Guncelle(Ogrenci ogrenci)
+        public IActionResult Guncelle(Ogrenci model)
         {
-            if (ModelState.IsValid)
+            var mevcutOgrenci = _context.Ogrenciler
+                                        .Include(x => x.AppUser)
+                                        .FirstOrDefault(x => x.OgrenciId == model.OgrenciId);
+
+            if (mevcutOgrenci == null) return NotFound();
+
+            mevcutOgrenci.Ad = model.Ad;
+            mevcutOgrenci.Soyad = model.Soyad;
+            mevcutOgrenci.OgrNo = model.OgrNo;
+            mevcutOgrenci.Bolum = model.Bolum;
+            mevcutOgrenci.Sinif = model.Sinif;
+            mevcutOgrenci.Yas = model.Yas;
+
+            if (mevcutOgrenci.AppUser != null)
             {
-                _context.Ogrenciler.Update(ogrenci); 
-                _context.SaveChanges(); 
-                return RedirectToAction("Index"); 
+                mevcutOgrenci.AppUser.AdSoyad = model.Ad + " " + model.Soyad;
+                mevcutOgrenci.AppUser.KullaniciAdi = model.OgrNo;
             }
 
-            return View(ogrenci);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }

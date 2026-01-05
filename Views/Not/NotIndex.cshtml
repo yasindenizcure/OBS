@@ -18,6 +18,7 @@
             --text: #1e293b;
             --primary: #4f46e5;
             --danger: #ef4444;
+            --success: #10b981;
         }
 
         body {
@@ -68,16 +69,41 @@
             font-size: 0.95rem;
         }
 
-        .score-badge {
+        /* Ortalama sayısı için stil */
+        .avg-text {
+            font-weight: 700;
+            color: var(--text);
+        }
+        .letter-badge {
             display: inline-block;
-            padding: 6px 14px;
-            border-radius: 10px;
+            padding: 4px 10px;
+            border-radius: 8px;
             font-weight: 800;
-            min-width: 55px;
+            font-size: 0.8rem;
+            min-width: 40px;
             text-align: center;
-            border: 1px solid rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
+        .btn-back {
+            text-decoration: none;
+            color: #64748b;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s ease;
+        }
+
+            .btn-back:hover {
+                background: #f1f5f9;
+                color: var(--primary);
+                border-color: var(--primary);
+            }
         .btn-add {
             text-decoration: none;
             background: var(--primary);
@@ -92,7 +118,6 @@
                 opacity: 0.9;
             }
 
-        /* İşlem Butonları Stili */
         .actions {
             display: flex;
             gap: 12px;
@@ -114,32 +139,18 @@
             color: var(--danger);
         }
 
-        .action-link:hover {
-            text-decoration: underline;
-            .logout-btn
-
-        {
+        .logout-btn {
             text-decoration: none;
-            background: transparent;
             color: var(--danger);
             border: 2px solid var(--danger);
             padding: 8px 16px;
             border-radius: 10px;
             font-weight: 700;
             font-size: 0.85rem;
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-
-        .logout-btn:hover {
-            background: var(--danger);
-            color: white;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
-        }
-        
-
     </style>
 </head>
 <body>
@@ -149,8 +160,9 @@
             <h1>Not Yönetimi</h1>
             <div style="display: flex; gap: 15px; align-items: center;">
                 <a href="/Not/NotEkle" class="btn-add">+ Yeni Giriş</a>
+                <a href="/Dashboard/Index" class="btn-back">Geri Dön</a>
                 <a href="/Login/Logout" class="logout-btn">
-                    <i class="fas fa-power-off"></i> GÜVENLİ ÇIKIŞ
+                    GÜVENLİ ÇIKIŞ
                 </a>
             </div>
         </div>
@@ -163,6 +175,7 @@
                     <th style="text-align:center">Vize</th>
                     <th style="text-align:center">Final</th>
                     <th style="text-align:center">Ortalama</th>
+                    <th style="text-align:center">Harf</th>
                     <th style="text-align:right">İşlemler</th>
                 </tr>
             </thead>
@@ -175,27 +188,31 @@
                         <td>@item.OgretimGorevlisi?.Ad @item.OgretimGorevlisi?.Soyad</td>
                         <td style="text-align:center">@item.VizeNotu</td>
                         <td style="text-align:center">@item.FinalNotu</td>
+
+                        <td style="text-align:center">
+                            <span class="avg-text">@item.Ortalama.ToString("0.##")</span>
+                        </td>
+
                         <td style="text-align:center">
                             @{
                                 double ort = item.Ortalama;
-                                string bg, color;
-                                if (ort < 50)
-                                {
-                                    bg = "#fee2e2"; color = "#991b1b";
-                                }
-                                else
-                                {
-                                    double sat = 65 + ((ort - 50) * 0.5);
-                                    double light = 92 - ((ort - 50) * 0.25);
-                                    bg = $"hsl(142, {sat}%, {light}%)";
-                                    color = "#064e3b";
-                                }
+                                string harf = "";
+                                string bgColor = "";
+                                string textColor = "";
+
+                                if (ort >= 90) { harf = "AA"; bgColor = "#dcfce7"; textColor = "#166534"; }
+                                else if (ort >= 80) { harf = "BA"; bgColor = "#f0fdf4"; textColor = "#16a34a"; }
+                                else if (ort >= 70) { harf = "BB"; bgColor = "#f0fdfa"; textColor = "#0d9488"; }
+                                else if (ort >= 60) { harf = "CB"; bgColor = "#fffbeb"; textColor = "#b45309"; }
+                                else if (ort >= 50) { harf = "CC"; bgColor = "#fff7ed"; textColor = "#c2410c"; }
+                                else { harf = "FF"; bgColor = "#fee2e2"; textColor = "#991b1b"; }
                             }
-                            <span class="score-badge" style="background-color: @bg; color: @color;">
-                                @ort.ToString("0.00")
+                            <span class="letter-badge" style="background-color: @bgColor; color: @textColor;">
+                                @harf
                             </span>
                         </td>
-                        <td>
+
+                        <td style="text-align:right">
                             <div class="actions">
                                 <a href="/Not/NotGuncelle/@item.NotId" class="action-link edit-link">Düzenle</a>
                                 <a href="/Not/NotSil/@item.NotId"

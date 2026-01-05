@@ -14,7 +14,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- Temel Ayarlar (Aynı Tasarım Korundu) --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -192,6 +191,28 @@
             box-shadow: 0 0 5px rgba(0, 255, 234, 0.2);
         }
 
+        .btn-logout {
+            font-family: 'Orbitron', sans-serif;
+            text-decoration: none;
+            padding: 8px 18px;
+            color: #ff0055;
+            border: 1px solid #ff0055;
+            background: rgba(255, 0, 85, 0.05);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .btn-logout:hover {
+                background: #ff0055;
+                color: #fff;
+                box-shadow: 0 0 15px #ff0055;
+                transform: scale(1.05);
+            }
         .btn-action {
             text-decoration: none;
             padding: 6px 12px;
@@ -236,6 +257,28 @@
             letter-spacing: 1px;
             font-size: 1.2rem;
         }
+
+        .btn-dashboard {
+            font-family: 'Orbitron', sans-serif;
+            text-decoration: none;
+            padding: 10px 25px;
+            color: #8a2be2;
+            border: 1px solid #8a2be2;
+            background: rgba(138, 43, 226, 0.05);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-right: auto; 
+        }
+
+            .btn-dashboard:hover {
+                background: #8a2be2;
+                color: #fff;
+                box-shadow: 0 0 20px #8a2be2;
+            }
     </style>
 </head>
 <body>
@@ -246,10 +289,20 @@
     <div class="panel-container">
         <h1>DERS İŞLEMLERİ</h1>
 
-        <div class="top-actions">
-            <a href="/Ders/DersKayit/" class="btn-new-course">
-                <span>+</span> DERS EKLE
+        <div class="top-actions" style="display: flex; justify-content: space-between; align-items: center;">
+
+            <a href="/Dashboard/Index" class="btn-dashboard">
+                <span>&lsaquo;</span> Geri Dön
             </a>
+
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <a href="/Ders/DersKayit/" class="btn-new-course">
+                    <span>+</span> DERS EKLE
+                </a>
+                <a href="/Login/Logout" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> GÜVENLİ ÇIKIŞ
+                </a>
+            </div>
         </div>
 
         <table class="cyber-table">

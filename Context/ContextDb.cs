@@ -15,6 +15,7 @@ namespace DenemeDers.Context
         public DbSet<OgretimGorevlisi> OgretimGorevlileri { get; set; }
         public DbSet<Not> Notlar { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
+        public DbSet<Bolum> Bolumler { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -23,6 +24,12 @@ namespace DenemeDers.Context
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
+            modelBuilder.Entity<Ders>()
+        .HasOne(d => d.Bolum)
+        .WithMany(b => b.Dersler)
+        .HasForeignKey(d => d.BolumId)
+        .OnDelete(DeleteBehavior.Cascade);
         }
+
     }
 }

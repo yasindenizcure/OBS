@@ -13,14 +13,16 @@
     <title>Öğrenci Paneli</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --bg-color: #f4f7f6; /* Çok hafif sıcak gri */
+            --bg-color: #f4f7f6;
             --card-bg: #ffffff;
-            --primary-accent: #6366f1; /* Şık bir indigo */
+            --primary-accent: #6366f1;
             --text-main: #1e293b;
             --text-muted: #64748b;
+            --danger: #ef4444;
         }
 
         * {
@@ -49,12 +51,19 @@
             padding: 40px;
         }
 
-        /* --- Header Bölümü --- */
         .header-section {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
         }
 
         h1 {
@@ -62,16 +71,21 @@
             font-weight: 700;
             letter-spacing: -0.5px;
         }
-
-        .btn-create {
+        .btn-base {
             text-decoration: none;
-            background-color: var(--primary-accent);
-            color: white;
             padding: 10px 20px;
             border-radius: 10px;
             font-size: 0.85rem;
             font-weight: 600;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-create {
+            background-color: var(--primary-accent);
+            color: white;
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
         }
 
@@ -81,7 +95,17 @@
                 filter: brightness(1.1);
             }
 
-        /* --- Tablo Tasarımı --- */
+        .btn-logout {
+            background-color: transparent;
+            color: var(--danger);
+            border: 1.5px solid var(--danger);
+        }
+
+            .btn-logout:hover {
+                background-color: var(--danger);
+                color: white;
+                box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+            }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -94,7 +118,6 @@
             font-size: 0.8rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
             border-bottom: 1px solid #f1f5f9;
         }
 
@@ -112,7 +135,6 @@
             font-size: 0.9rem;
         }
 
-        /* Veri Stilleri */
         .student-name {
             font-weight: 600;
             color: #0f172a;
@@ -127,7 +149,6 @@
             font-weight: 500;
         }
 
-        /* --- İşlem Butonları --- */
         .btn-action {
             text-decoration: none;
             padding: 6px 12px;
@@ -137,6 +158,19 @@
             margin-left: 8px;
             transition: all 0.2s;
         }
+
+        .btn-back {
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1.5px solid #e2e8f0;
+            margin-right: auto; 
+        }
+
+            .btn-back:hover {
+                background-color: #f8fafc;
+                color: var(--primary-accent);
+                border-color: var(--primary-accent);
+            }
 
         .btn-edit {
             color: var(--primary-accent);
@@ -163,8 +197,21 @@
 
     <div class="container">
         <div class="header-section">
-            <h1>Öğrenci Listesi</h1>
-            <a asp-action="Kayit" class="btn-create">Yeni Kayıt</a>
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <a href="/Dashboard/Index" class="btn-base btn-back">
+                    <i class="fas fa-arrow-left"></i> Geri Dön
+                </a>
+                <h1>Öğrenci Listesi</h1>
+            </div>
+
+            <div class="header-actions">
+                <a asp-action="Kayit" class="btn-base btn-create">
+                    <i class="fas fa-plus"></i> Yeni Kayıt
+                </a>
+                <a href="/Login/Logout" class="btn-base btn-logout">
+                    <i class="fas fa-power-off"></i> Güvenli Çıkış
+                </a>
+            </div>
         </div>
 
         <table>
@@ -193,7 +240,7 @@
                         </td>
                         <td style="text-align: right;">
                             <a asp-action="Guncelle" asp-route-id="@ogr.OgrenciId" class="btn-action btn-edit">Düzenle</a>
-                            <a asp-action="Sil" asp-route-id="@ogr.OgrenciId" class="btn-action btn-delete">Sil</a>
+                            <a asp-action="Sil" asp-route-id="@ogr.OgrenciId" class="btn-action btn-delete" onclick="return confirm('Bu öğrenciyi silmek istediğinize emin misiniz?')">Sil</a>
                         </td>
                     </tr>
                 }

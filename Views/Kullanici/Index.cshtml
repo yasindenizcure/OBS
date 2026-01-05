@@ -1,0 +1,210 @@
+﻿@model List<AppUser>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kullanıcı Yönetimi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --cyan: #00f3ff;
+            --magenta: #ff00ff;
+            --bg-dark: #050505;
+            --border: rgba(0, 243, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--bg-dark);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            background-image: radial-gradient(circle at 50% 50%, #101015 0%, #000 100%);
+        }
+
+        .panel-container {
+            width: 100%;
+            max-width: 1100px;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--border);
+            padding: 30px;
+            position: relative;
+            clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%);
+        }
+
+        .header-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            font-family: 'Orbitron';
+            color: var(--cyan);
+            text-shadow: 0 0 10px var(--cyan);
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+        }
+
+        .btn-add {
+            text-decoration: none;
+            font-family: 'Orbitron';
+            color: var(--cyan);
+            border: 1px solid var(--cyan);
+            padding: 8px 16px;
+            font-size: 0.8rem;
+            transition: 0.3s;
+            background: rgba(0, 243, 255, 0.05);
+        }
+
+            .btn-add:hover {
+                background: var(--cyan);
+                color: #000;
+                box-shadow: 0 0 15px var(--cyan);
+            }
+
+        .cyber-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+            .cyber-table th {
+                text-align: left;
+                font-family: 'Orbitron';
+                color: var(--cyan);
+                padding: 15px;
+                font-size: 0.8rem;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .cyber-table tr {
+                background: rgba(255, 255, 255, 0.02);
+                transition: 0.3s;
+            }
+
+                .cyber-table tr:hover {
+                    background: rgba(0, 243, 255, 0.05);
+                    transform: translateX(5px);
+                }
+
+            .cyber-table td {
+                padding: 15px;
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
+            }
+
+        .role-badge {
+            font-family: 'Orbitron';
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border: 1px solid;
+            text-transform: uppercase;
+        }
+
+        .role-hoca {
+            color: var(--magenta);
+            border-color: var(--magenta);
+        }
+
+        .role-memur {
+            color: var(--cyan);
+            border-color: var(--cyan);
+        }
+
+        .role-ogrenci {
+            color: #ffcc00;
+            border-color: #ffcc00;
+        }
+
+        .btn-delete {
+            color: #ff003c;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: 'Orbitron';
+            font-size: 0.7rem;
+            border: 1px solid #ff003c;
+            padding: 5px 10px;
+            transition: 0.3s;
+        }
+
+            .btn-delete:hover {
+                background: #ff003c;
+                color: #fff;
+                box-shadow: 0 0 10px #ff003c;
+            }
+
+        .status-online {
+            color: #00ff00;
+            font-size: 0.7rem;
+            font-family: 'Orbitron';
+        }
+    </style>
+</head>
+<body>
+
+    <div class="panel-container">
+        <div class="header-area">
+            <h1>KULLANICI YONETIMI</h1>
+            <div style="display:flex; gap:10px;">
+                <a href="/Kullanici/Ekle" class="btn-add">+ YENİ_KAYIT</a>
+                <a href="/Dashboard/Index" class="btn-add" style="border-color:#fff; color:#fff;">GERİ_DÖN</a>
+            </div>
+        </div>
+
+        <table class="cyber-table">
+            <thead>
+                <tr>
+                    <th>ERİŞİM_İSMİ</th>
+                    <th>KULLANICI_KODU</th>
+                    <th>YETKİ_DÜZEYİ</th>
+                    <th>DURUM</th>
+                    <th style="text-align:right">İŞLEMLER</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td style="font-weight: 600;">@user.AdSoyad</td>
+                        <td style="color: #94a3b8;">@user.KullaniciAdi</td>
+                        <td>
+                            <span class="role-badge role-@user.Rol.ToLower().Trim()">
+                                @user.Rol
+                            </span>
+                        </td>
+                        <td><span class="status-online">// AKTİF</span></td>
+                        <td style="text-align:right">
+                            <a href="/Kullanici/Sil/@user.AppUserId"
+                               class="btn-delete"
+                               onclick="return confirm('BU KULLANICININ ERİŞİMİNİ İPTAL ETMEK İSTEDİĞİNİZE EMİN MİSİNİZ?')">
+                                ERİŞİMİ_KES
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

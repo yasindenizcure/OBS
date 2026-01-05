@@ -2,6 +2,7 @@
 using DenemeDers.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace DenemeDers.Controllers
@@ -15,8 +16,6 @@ namespace DenemeDers.Controllers
         {
             _context = context;
         }
-
-        // Listeleme
         public IActionResult OgrGorevlisi()
         {
             var ogrgorevlisi = _context.OgretimGorevlileri.Include(x => x.AppUser).ToList();
@@ -26,6 +25,8 @@ namespace DenemeDers.Controllers
         [HttpGet]
         public IActionResult OgrGorevlisiKayit()
         {
+            var bolumler = _context.Bolumler.ToList();
+            ViewBag.BolumListesi = new SelectList(bolumler, "BolumId", "BolumAdi");
             return View();
         }
 
@@ -47,8 +48,6 @@ namespace DenemeDers.Controllers
 
                 _context.AppUsers.Add(yeniKullanici);
                 _context.SaveChanges();
-
-                // Hocayı bu kullanıcı hesabına bağlıyoruz
                 model.AppUserId = yeniKullanici.AppUserId;
 
                 _context.OgretimGorevlileri.Add(model);
@@ -80,13 +79,38 @@ namespace DenemeDers.Controllers
             if (ogrgorevlisi == null) return NotFound();
             return View(ogrgorevlisi);
         }
-
         [HttpPost]
         public IActionResult OgrGorevlisiGuncelle(OgretimGorevlisi model)
         {
-            _context.OgretimGorevlileri.Update(model);
-            _context.SaveChanges();
-            return RedirectToAction("OgrGorevlisi");
+            // Veritabanındaki orijinal kaydı tüm ilişkileriyle (AppUser dahil) çekiyoruz
+            var guncellenecekHoca = _context.OgretimGorevlileri
+                                           .Include(x => x.AppUser)
+                                           .FirstOrDefault(x => x.OgretimGorevlisiId == model.OgretimGorevlisiId);
+
+            if (guncellenecekHoca == null)
+            {
+                return NotFound();
+            }
+            guncellenecekHoca.Ad = model.Ad;
+            guncellenecekHoca.Soyad = model.Soyad;
+            guncellenecekHoca.Unvan = model.Unvan;
+            guncellenecekHoca.Bolum = model.Bolum;
+
+            if (guncellenecekHoca.AppUser != null)
+            {
+                guncellenecekHoca.AppUser.AdSoyad = model.Ad + " " + model.Soyad;
+            }
+
+            try
+            {
+                _context.SaveChanges();
+                return RedirectToAction("OgrGorevlisi");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Güncelleme sırasında hata oluştu: " + ex.Message);
+                return View(model);
+            }
         }
     }
 }

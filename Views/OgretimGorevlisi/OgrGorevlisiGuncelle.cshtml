@@ -14,7 +14,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500&display=swap" rel="stylesheet">
 
     <style>
-        /* --- Temel Ayarlar --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -34,7 +33,6 @@
             position: relative;
         }
 
-        /* --- Arka Plan --- */
         .background-animation {
             position: absolute;
             top: 0;
@@ -73,7 +71,6 @@
             }
         }
 
-        /* --- Form Kutusu --- */
         .form-container {
             width: 90%;
             max-width: 500px;
@@ -142,24 +139,19 @@
                 background: rgba(255, 204, 0, 0.05);
             }
 
-        /* --- DROPDOWN (SELECT) ÖZELLEŞTİRME --- */
         select.form-control {
             appearance: none;
             cursor: pointer;
-            /* Sarı Ok ikonu (SVG - URL Encoded: #ffcc00) */
             background-image: url('data:image/svg+xml;utf8,<svg fill="%23ffcc00" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
             background-repeat: no-repeat;
             background-position: right 10px center;
         }
-
-            /* Dropdown açıldığında seçeneklerin arka planı */
             select.form-control option {
-                background-color: #1a1a2e; /* Koyu lacivert arka plan */
-                color: #ffcc00; /* Sarı yazı */
+                background-color: #1a1a2e;
+                color: #ffcc00;
                 padding: 10px;
             }
 
-        /* --- Buton --- */
         .futuristic-btn {
             display: block;
             width: 100%;
@@ -185,7 +177,6 @@
                 transform: translateY(-2px);
             }
 
-        /* Geri Dön Linki */
         .btn-back {
             display: block;
             text-align: center;
@@ -214,6 +205,7 @@
         <form method="post" asp-action="OgrGorevlisiGuncelle" asp-controller="OgretimGorevlisi">
 
             <input type="hidden" asp-for="OgretimGorevlisiId" />
+            <input type="hidden" asp-for="AppUserId" />
 
             <div class="form-group">
                 <label class="form-label">AD</label>
