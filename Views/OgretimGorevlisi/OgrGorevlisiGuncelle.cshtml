@@ -21,6 +21,12 @@
             outline: none;
         }
 
+        .text-danger {
+            color: #ff1744;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: block;
+        }
         body {
             font-family: 'Rajdhani', sans-serif;
             background-color: #0b0c15;
@@ -191,7 +197,6 @@
                 color: #ffcc00;
                 text-shadow: 0 0 5px #ffcc00;
             }
-
     </style>
 </head>
 <body>
@@ -231,12 +236,10 @@
 
             <div class="form-group">
                 <label class="form-label">BÖLÜM</label>
-                <select class="form-control" asp-for="Bolum" required>
+                <select asp-for="BolumId" class="form-control" asp-items="@(ViewBag.BolumListesi as SelectList)" required>
                     <option value="">Seçiniz...</option>
-                    <option value="YBS">Yönetim Bilişim Sistemleri</option>
-                    <option value="UTİ">Uluslararası Ticaret ve İşletme</option>
-                    <option value="İşletme">İşletme</option>
                 </select>
+                <span asp-validation-for="BolumId" class="text-danger"></span>
             </div>
 
             <button type="submit" class="futuristic-btn">DEĞİŞİKLİKLERİ KAYDET</button>

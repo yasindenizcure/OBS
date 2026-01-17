@@ -203,11 +203,8 @@
 
                 <div class="form-group full-width">
                     <label class="form-label">Bölüm</label>
-                    <select class="form-control" asp-for="Bolum" required>
+                    <select class="form-control" asp-for="BolumId" asp-items="ViewBag.Bolumler" required>
                         <option value="">Bölüm Seçiniz...</option>
-                        <option value="YBS">Yönetim Bilişim Sistemleri</option>
-                        <option value="UTİ">Uluslararası Ticaret ve İşletme</option>
-                        <option value="İşletme">İşletme</option>
                     </select>
                 </div>
 

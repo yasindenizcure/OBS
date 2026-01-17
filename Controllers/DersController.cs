@@ -26,7 +26,13 @@ namespace DenemeDers.Controllers
                                                         Value = x.OgretimGorevlisiId.ToString() 
                                                     }).ToList();
             ViewBag.ogrGorevlisi = ogretmenListesi;
+            ViewBag.bolumler = _context.Bolumler.Select(x => new SelectListItem
+            {
+                Text = x.BolumAdi,
+                Value = x.BolumId.ToString() 
+            }).ToList();
             ModelState.Remove("OgretimGorevlisi");
+            ModelState.Remove("Bolum");
         }
         public IActionResult Dersler()
         {
@@ -41,22 +47,25 @@ namespace DenemeDers.Controllers
         [HttpPost]
         public IActionResult DersKayit(Ders dersler)
         {
-            List<SelectListItem> ogretmenListesi = (from x in _context.OgretimGorevlileri.ToList()
-                                                    select new SelectListItem
-                                                    {
-                                                        Text = x.Ad + " " + x.Soyad,
-                                                        Value = x.OgretimGorevlisiId.ToString()
-                                                    }).ToList();
-            ViewBag.ogrGorevlisi = ogretmenListesi;
             ModelState.Remove("OgretimGorevlisi");
+            ModelState.Remove("Bolum");
 
             if (ModelState.IsValid)
             {
-                _context.Dersler.Add(dersler);
-                _context.SaveChanges();
-                return RedirectToAction("Dersler");
+                try
+                {
+                    _context.Dersler.Add(dersler);
+                    _context.SaveChanges();
+                    return RedirectToAction("Dersler");
+                }
+                catch (Exception ex)
+                {
+                    var mesaj = ex.InnerException?.Message ?? ex.Message;
+                    ModelState.AddModelError("", "Veritabanı Hatası: " + mesaj);
+                }
             }
 
+            OgretmenListesiniDoldur();
             return View(dersler);
         }
         public IActionResult DersSil(int id) 
@@ -90,6 +99,8 @@ namespace DenemeDers.Controllers
                 deger.SinifDuzeyi = dersler.SinifDuzeyi;
                 deger.DersTuru = dersler.DersTuru;
                 deger.OgretimGorevlisiId = dersler.OgretimGorevlisiId;
+                deger.AKTS = dersler.AKTS;
+                deger.BolumId = dersler.BolumId;
                 _context.SaveChanges();
             }
            return RedirectToAction("Dersler");

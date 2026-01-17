@@ -51,15 +51,21 @@ namespace DenemeDers.Controllers
             int hocaId = GetAktifHocaId();
             var hoca = _context.OgretimGorevlileri.FirstOrDefault(x => x.OgretimGorevlisiId == hocaId);
             if (hoca == null) return Content("Hoca oturumu bulunamadı! Lütfen tekrar giriş yapın.");
+            var bolumundekiOgrenciler = _context.Ogrenciler
+        .Where(x => x.BolumId == hoca.BolumId) // Kritik nokta burası: Bölüm eşleşmesi
+        .Select(s => new {
+            Id = s.OgrenciId,
+            Ad = s.Ad + " " + s.Soyad
+        })
+        .ToList();
+
 
             var dersler = _context.Dersler.Where(x => x.OgretimGorevlisiId == hocaId).ToList();
 
             ViewBag.HocaAdSoyad = hoca.Ad + " " + hoca.Soyad;
             ViewBag.HocaId = hocaId;
 
-            ViewBag.Ogrenciler = new SelectList(_context.Ogrenciler
-                .Select(s => new { Id = s.OgrenciId, Ad = s.Ad + " " + s.Soyad }), "Id", "Ad");
-
+            ViewBag.Ogrenciler = new SelectList(bolumundekiOgrenciler, "Id", "Ad");
             ViewBag.Dersler = new SelectList(dersler, "DersId", "DersAdi");
 
             return View();

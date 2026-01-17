@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using BCrypt.Net;
 
 namespace DenemeDers.Controllers
 {
@@ -18,57 +19,85 @@ namespace DenemeDers.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return Yonlendir(User.FindFirst(ClaimTypes.Role)?.Value);
+            }
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Index(string ad, string sifre)
         {
-            var user = _context.AppUsers.FirstOrDefault(x => x.KullaniciAdi == ad && x.Sifre == sifre);
+            var user = _context.AppUsers.FirstOrDefault(x => x.KullaniciAdi == ad);
 
             if (user != null)
             {
-                var hoca = _context.OgretimGorevlileri.FirstOrDefault(x => x.AppUserId == user.AppUserId);
-                if (hoca != null)
+                bool isValid = false;
+                try
                 {
-                    HttpContext.Session.SetInt32("HocaId", hoca.OgretimGorevlisiId);
+                    isValid = BCrypt.Net.BCrypt.Verify(sifre, user.Sifre);
+                }
+                catch
+                {
+                    isValid = (sifre == user.Sifre);
                 }
 
-                var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, user.AdSoyad),
-            new Claim(ClaimTypes.Role, user.Rol),
-            new Claim("UserId", user.AppUserId.ToString())
-        };
-
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var authProperties = new AuthenticationProperties { IsPersistent = true };
-
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(claimsIdentity), authProperties);
-
-                string userRole = user.Rol.ToLower().Trim();
-
-                if (userRole == "hoca")
+                if (isValid)
                 {
-                    return RedirectToAction("NotIndex", "Not");
-                }
-                else if (userRole == "ogrenci")
-                {
-                    return RedirectToAction("Notlarim", "OgrenciPanel");
-                }
-                else if (userRole == "admin" || userRole == "memur")
-                {
-                    return RedirectToAction("Index", "Dashboard");
+                    var hoca = _context.OgretimGorevlileri.FirstOrDefault(x => x.AppUserId == user.AppUserId);
+                    if (hoca != null)
+                    {
+                        HttpContext.Session.SetInt32("HocaId", hoca.OgretimGorevlisiId);
+                    }
+
+                    var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.AdSoyad),
+                new Claim(ClaimTypes.Role, user.Rol.Trim()),
+                new Claim("UserId", user.AppUserId.ToString())
+            };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var authProperties = new AuthenticationProperties { IsPersistent = true };
+
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity), authProperties);
+
+                    // Yönlendirme
+                    return Yonlendir(user.Rol);
                 }
             }
 
             ViewBag.Error = "Kullanıcı adı veya şifre hatalı!";
             return View();
         }
+        private IActionResult Yonlendir(string role)
+        {
+            if (string.IsNullOrEmpty(role)) return RedirectToAction("Index");
+
+            string userRole = role.ToLower().Trim();
+
+            if (userRole == "admin" || userRole == "memur")
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+            else if (userRole == "hoca")
+            {
+                return RedirectToAction("NotIndex", "Not");
+            }
+            else if (userRole == "ogrenci")
+            {
+                return RedirectToAction("Notlarim", "OgrenciPanel");
+            }
+
+            return RedirectToAction("Index");
+        }
 
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext.Session.Clear();
             return RedirectToAction("Index", "Login");
         }
     }

@@ -35,21 +35,25 @@ namespace DenemeDers.Controllers
         {
             ModelState.Remove("Dersler");
             ModelState.Remove("AppUser");
+            ModelState.Remove("Bolum");
 
             if (ModelState.IsValid)
             {
+                string hamSifre = "123";
+                string hashliSifre = BCrypt.Net.BCrypt.HashPassword(hamSifre);
+
                 var yeniKullanici = new AppUser
                 {
                     AdSoyad = model.Ad + " " + model.Soyad,
                     KullaniciAdi = (model.Ad.ToLower() + "." + model.Soyad.ToLower()).Replace(" ", ""),
-                    Sifre = "123", 
+                    Sifre = hashliSifre,
                     Rol = "Hoca"
                 };
 
                 _context.AppUsers.Add(yeniKullanici);
                 _context.SaveChanges();
-                model.AppUserId = yeniKullanici.AppUserId;
 
+                model.AppUserId = yeniKullanici.AppUserId;
                 _context.OgretimGorevlileri.Add(model);
                 _context.SaveChanges();
 
@@ -75,14 +79,16 @@ namespace DenemeDers.Controllers
         [HttpGet]
         public IActionResult OgrGorevlisiGuncelle(int id)
         {
-            var ogrgorevlisi = _context.OgretimGorevlileri.Find(id);
-            if (ogrgorevlisi == null) return NotFound();
-            return View(ogrgorevlisi);
+            var hoca = _context.OgretimGorevlileri.Find(id);
+            if (hoca == null) return NotFound();
+
+            ViewBag.BolumListesi = new SelectList(_context.Bolumler.ToList(), "BolumId", "BolumAdi", hoca.BolumId);
+
+            return View(hoca);
         }
         [HttpPost]
         public IActionResult OgrGorevlisiGuncelle(OgretimGorevlisi model)
         {
-            // Veritabanındaki orijinal kaydı tüm ilişkileriyle (AppUser dahil) çekiyoruz
             var guncellenecekHoca = _context.OgretimGorevlileri
                                            .Include(x => x.AppUser)
                                            .FirstOrDefault(x => x.OgretimGorevlisiId == model.OgretimGorevlisiId);
@@ -111,6 +117,23 @@ namespace DenemeDers.Controllers
                 ModelState.AddModelError("", "Güncelleme sırasında hata oluştu: " + ex.Message);
                 return View(model);
             }
+
+        }
+        [HttpGet]
+        public IActionResult SifreleriTopluHashle()
+        {
+            var tumKullanicilar = _context.AppUsers.ToList();
+            int sayac = 0;
+            foreach (var user in tumKullanicilar)
+            {
+                if (user.Sifre.Length < 20)
+                {
+                    user.Sifre = BCrypt.Net.BCrypt.HashPassword(user.Sifre);
+                    sayac++;
+                }
+            }
+            _context.SaveChanges();
+            return Content($"{sayac} adet kullanıcının şifresi başarıyla hashlendi!");
         }
     }
 }

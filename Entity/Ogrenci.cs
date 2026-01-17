@@ -7,9 +7,10 @@
         public string? Soyad { get; set; }
         public int Yas { get; set; }
         public int Sinif { get; set; }
-        public string? Bolum { get; set; }
+        public int BolumId { get; set; }
+        public virtual Bolum? Bolum { get; set; } 
         public string? OgrNo { get; set; }
         public int AppUserId { get; set; }
-        public AppUser AppUser { get; set; }
+        public virtual AppUser? AppUser { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using DenemeDers.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,59 +21,70 @@ namespace DenemeDers.Controllers
 
         public IActionResult Index()
         {
-            var ogrenciler = _context.Ogrenciler.ToList();
+            var ogrenciler = _context.Ogrenciler.Include(x => x.Bolum).ToList();
             return View(ogrenciler);
         }
 
         [HttpGet]
         public IActionResult Kayit()
         {
+            ViewBag.Bolumler = new SelectList(_context.Bolumler.ToList(), "BolumId", "BolumAdi");
             return View();
         }
 
         [HttpPost]
         public IActionResult Kayit(Ogrenci model)
         {
-            var hesap = new AppUser
+            ModelState.Remove("AppUser");
+            ModelState.Remove("Bolum");
+
+            if (ModelState.IsValid)
             {
-                AdSoyad = model.Ad + " " + model.Soyad,
-                KullaniciAdi = model.OgrNo,
-                Sifre = "123",
-                Rol = "Ogrenci"
-            };
+                var hesap = new AppUser
+                {
+                    AdSoyad = model.Ad + " " + model.Soyad,
+                    KullaniciAdi = model.OgrNo,
+                    Sifre = "123", 
+                    Rol = "Ogrenci"
+                };
 
-            _context.AppUsers.Add(hesap);
-            _context.SaveChanges();
+                _context.AppUsers.Add(hesap);
+                _context.SaveChanges(); 
+                model.AppUserId = hesap.AppUserId;
+                _context.Ogrenciler.Add(model);
+                _context.SaveChanges();
 
-            model.AppUserId = hesap.AppUserId;
+                return RedirectToAction("Index");
+            }
 
-            _context.Ogrenciler.Add(model);
-            _context.SaveChanges();
-
-            return RedirectToAction("Index");
+            ViewBag.Bolumler = new SelectList(_context.Bolumler.ToList(), "BolumId", "BolumAdi");
+            return View(model);
         }
+
         public IActionResult Sil(int id)
         {
             var ogrenci = _context.Ogrenciler.Find(id);
-            if (ogrenci == null)
+            if (ogrenci != null)
             {
-                return NotFound();
+                var user = _context.AppUsers.Find(ogrenci.AppUserId);
+                _context.Ogrenciler.Remove(ogrenci);
+                if (user != null)
+                {
+                    _context.AppUsers.Remove(user);
+                }
+
+                _context.SaveChanges();
             }
-            _context.Ogrenciler.Remove(ogrenci);
-            _context.SaveChanges();
             return RedirectToAction("Index");
         }
+
         [HttpGet]
         public IActionResult Guncelle(int id)
         {
-
             var ogrenci = _context.Ogrenciler.Find(id);
+            if (ogrenci == null) return NotFound();
 
-            if (ogrenci == null)
-            {
-                return NotFound();
-            }
-
+            ViewBag.Bolumler = new SelectList(_context.Bolumler.ToList(), "BolumId", "BolumAdi", ogrenci.BolumId);
             return View(ogrenci);
         }
 
@@ -88,7 +100,7 @@ namespace DenemeDers.Controllers
             mevcutOgrenci.Ad = model.Ad;
             mevcutOgrenci.Soyad = model.Soyad;
             mevcutOgrenci.OgrNo = model.OgrNo;
-            mevcutOgrenci.Bolum = model.Bolum;
+            mevcutOgrenci.BolumId = model.BolumId;
             mevcutOgrenci.Sinif = model.Sinif;
             mevcutOgrenci.Yas = model.Yas;
 

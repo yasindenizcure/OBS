@@ -24,12 +24,18 @@ namespace DenemeDers.Context
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
+            modelBuilder.Entity<OgretimGorevlisi>()
+        .HasOne(x => x.AppUser)
+        .WithMany()
+        .HasForeignKey(x => x.AppUserId)
+        .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Ders>()
         .HasOne(d => d.Bolum)
         .WithMany(b => b.Dersler)
         .HasForeignKey(d => d.BolumId)
         .OnDelete(DeleteBehavior.Cascade);
         }
+
 
     }
 }

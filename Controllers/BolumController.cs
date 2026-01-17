@@ -5,7 +5,7 @@ using DenemeDers.Entity;
 
 namespace DenemeDers.Controllers
 {
-    [Authorize(Roles="admin,Admin")]
+    [Authorize(Roles="admin")]
     public class BolumController : Controller
     {
         private readonly ContextDb _context;
