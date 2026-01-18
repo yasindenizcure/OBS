@@ -14,6 +14,7 @@ Akademisyenler: Kendilerine atanan derslere not girişi yapabilen ve kendi öğr
 
 ------------------------------------
 🛠 Kullanılan Teknolojiler
+
 Dil: C#
 
 Framework: ASP.NET Core MVC 8
