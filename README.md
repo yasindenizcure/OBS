@@ -39,5 +39,7 @@ Akademik Kadro: Hocaların unvanlarına ve bölümlerine göre yönetildiği ala
 Not Giriş Terminali: Hocalar, sadece kendi derslerinin bağlı olduğu bölümlerdeki öğrencilere not girişi yapabilir. Sistem, ders-bölüm uyumunu otomatik denetler.
 
 Öğrenci Giriş Terminali: Öğrenci sadece kendi id ve şifresini girerek kendisine sistemden verilen notları görebilir. Diğer kısımlara ulaşamaz.
+
 ------------------------------------
 🎥 Tanıtım Videosu
+https://www.youtube.com/watch?v=jHpkXPkxJnQ
