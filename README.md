@@ -28,6 +28,7 @@ Kütüphaneler: FontAwesome (İkonlar için), Google Fonts (Orbitron & Rajdhani)
 
 ------------------------------------
 📖 Senaryo ve Kullanım Amacı
+
 Uygulama başlatıldığında cyberpunk temalı bir Dashboard ekranı kullanıcıyı karşılar.
 
 Dashboard: Toplam öğrenci, hoca ve ders sayıları dinamik olarak listelenir. Chart.js ile ders başarı ortalamaları grafiksel olarak sunulur.
