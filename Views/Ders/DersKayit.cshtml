@@ -1,193 +1,203 @@
 ﻿@model DenemeDers.Entity.Ders
 @{
-    Layout = null;
+    ViewData["Title"] = "Yeni Ders Kaydı";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Yeni Ders Kaydı</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            box-sizing: border-box;
+<style>
+    .ders-register-container {
+        max-width: 600px;
+        margin: 20px auto;
+        background: rgba(16, 18, 27, 0.7);
+        border: 1px solid rgba(255, 204, 0, 0.2);
+        border-radius: 24px;
+        padding: 40px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .ders-register-container::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 204, 0, 0.1);
+            filter: blur(30px);
+            border-radius: 50%;
+        }
+
+    .form-header {
+        border-bottom: 1px solid rgba(255, 204, 0, 0.1);
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        text-align: center;
+    }
+
+        .form-header h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: #ffcc00;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
             margin: 0;
-            padding: 0;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
+        }
+
+        .form-header p {
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        display: block;
+        font-family: 'Orbitron';
+        font-size: 0.7rem;
+        color: #ffcc00;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        opacity: 0.8;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 16px;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 204, 0, 0.1);
+        border-radius: 10px;
+        color: #fff;
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus {
+            border-color: #ffcc00;
+            background: rgba(255, 204, 0, 0.05);
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.2);
             outline: none;
         }
 
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background-color: #050505;
-            color: #e0e0e0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            padding: 20px;
+    select.form-control option {
+        background-color: #11121a;
+        color: #fff;
+    }
+
+    select.form-control {
+        appearance: none;
+        background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23ffcc00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 14px;
+    }
+
+    .btn-cyber-submit {
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(90deg, #ffcc00, #ffaa00);
+        color: #000;
+        border: none;
+        border-radius: 10px;
+        font-family: 'Orbitron';
+        font-weight: bold;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 20px;
+        letter-spacing: 1px;
+    }
+
+        .btn-cyber-submit:hover {
+            box-shadow: 0 0 25px rgba(255, 204, 0, 0.5);
+            transform: translateY(-2px);
         }
 
-        .bg-grid {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(rgba(0, 255, 234, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 234, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
-            transform: perspective(800px) rotateX(20deg) scale(1.2);
-            animation: gridFloat 20s infinite linear;
+    .btn-cancel {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+        color: #64748b;
+        text-decoration: none;
+        font-size: 0.8rem;
+        font-family: 'Orbitron';
+        transition: 0.3s;
+    }
+
+        .btn-cancel:hover {
+            color: #ff3131;
         }
 
-        @@keyframes gridFloat {
-            0%, 100% {
-                transform: perspective(800px) rotateX(20deg) scale(1.2) translateY(0);
-            }
+    .validation-summary {
+        background: rgba(255, 77, 77, 0.1);
+        border-left: 4px solid #ff4d4d;
+        color: #ff4d4d;
+        padding: 10px;
+        margin-bottom: 20px;
+        font-size: 0.85rem;
+        border-radius: 4px;
+    }
+</style>
 
-            50% {
-                transform: perspective(800px) rotateX(20deg) scale(1.2) translateY(-20px);
-            }
-        }
-
-        .form-card {
-            width: 100%;
-            max-width: 550px;
-            padding: 40px;
-            background: rgba(20, 20, 35, 0.8);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(0, 255, 234, 0.3);
-            border-radius: 15px;
-            position: relative;
-        }
-
-        h2 {
-            font-family: 'Orbitron', sans-serif;
-            text-align: center;
-            color: #00ffea;
-            margin-bottom: 25px;
-            text-shadow: 0 0 10px rgba(0, 255, 234, 0.5);
-            letter-spacing: 2px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.75rem;
-            color: #8a8a8a;
-            margin-bottom: 6px;
-            text-transform: uppercase;
-        }
-
-        .input-cyber {
-            width: 100%;
-            padding: 12px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid #333;
-            border-radius: 5px;
-            color: #fff;
-            font-size: 1rem;
-            font-family: 'Rajdhani', sans-serif;
-        }
-
-            .input-cyber:focus {
-                border-color: #00ffea;
-                box-shadow: 0 0 10px rgba(0, 255, 234, 0.3);
-            }
-
-        select.input-cyber option {
-            background-color: #1a1a2e;
-            color: #fff;
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 15px;
-            margin-top: 20px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: bold;
-            color: #050505;
-            background: linear-gradient(90deg, #00ffea, #00b8a9);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
-        }
-
-            .btn-submit:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 0 15px #00ffea;
-            }
-
-        .validation-summary {
-            color: #ff4d4d;
-            font-size: 0.85rem;
-            margin-bottom: 15px;
-            list-style: none;
-        }
-    </style>
-</head>
-<body>
-    <div class="bg-grid"></div>
-    <div class="form-card">
-        <h2>DERS TANIMLAMA</h2>
-        <div asp-validation-summary="All" class="validation-summary"></div>
-        <form asp-action="DersKayit" method="post">
-            <div class="form-group">
-                <label>DERS ADI</label>
-                <input asp-for="DersAdi" class="input-cyber" placeholder="İstatistik.." required />
-            </div>
-
-            <div style="display: flex; gap: 15px;">
-                <div class="form-group" style="flex: 1;">
-                    <label>SINIF DÜZEYİ</label>
-                    <select asp-for="SinifDuzeyi" class="input-cyber" required>
-                        <option value="1">1. Sınıf</option>
-                        <option value="2">2. Sınıf</option>
-                        <option value="3">3. Sınıf</option>
-                        <option value="4">4. Sınıf</option>
-                    </select>
-                </div>
-                <div class="form-group" style="flex: 1;">
-                    <label>AKTS</label>
-                    <input asp-for="AKTS" type="number" class="input-cyber" placeholder="4" required />
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>DERS TÜRÜ</label>
-                <select asp-for="DersTuru" class="input-cyber" required>
-                    <option value="Zorunlu">Zorunlu</option>
-                    <option value="Seçmeli">Seçmeli</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>BÖLÜM</label>
-                <select asp-for="BolumId" class="input-cyber" asp-items="ViewBag.bolumler" required>
-                    <option value="">Bölüm Seçiniz...</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>ÖĞRETİM GÖREVLİSİ</label>
-                <select asp-for="OgretimGorevlisiId" class="input-cyber" asp-items="ViewBag.ogrGorevlisi">
-                    <option value="">Hoca Seçiniz...</option>
-                </select>
-            </div>
-
-            <button type="submit" class="btn-submit">SİSTEME KAYDET</button>
-            <a href="/Ders/Dersler/" style="display:block; text-align:center; margin-top:15px; color:#666; text-decoration:none; font-size:0.9rem; font-family:'Orbitron'">← GERİ DÖN</a>
-        </form>
+<div class="ders-register-container">
+    <div class="form-header">
+        <h1>Ders Tanımlama Sayfası</h1>
+        <p>Akademik müfredata yeni bir ders ekleyin.</p>
     </div>
-</body>
-</html>
+    <form asp-action="DersKayit" method="post">
+        <div class="form-group">
+            <label class="form-label">Ders Adı</label>
+            <input asp-for="DersAdi" class="form-control" placeholder="Örn: Genel Muhasebe" required />
+        </div>
+
+        <div style="display: flex; gap: 15px;">
+            <div class="form-group" style="flex: 1;">
+                <label class="form-label">Sınıf</label>
+                <select asp-for="SinifDuzeyi" class="form-control" required>
+                    <option value="1">1. Sınıf</option>
+                    <option value="2">2. Sınıf</option>
+                    <option value="3">3. Sınıf</option>
+                    <option value="4">4. Sınıf</option>
+                </select>
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label class="form-label">AKTS Değeri</label>
+                <input asp-for="AKTS" type="number" class="form-control" placeholder="6" required />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Ders Kategorisi</label>
+            <select asp-for="DersTuru" class="form-control" required>
+                <option value="Zorunlu">Zorunlu Ders</option>
+                <option value="Seçmeli">Seçmeli Ders</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">DEPARTMAN</label>
+            <select asp-for="BolumId" class="form-control" asp-items="ViewBag.bolumler" required>
+                <option value="">Departman seçiniz...</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Sorumlu Akademisyen</label>
+            <select asp-for="OgretimGorevlisiId" class="form-control" asp-items="ViewBag.ogrGorevlisi" required>
+                <option value="">Akademisyen atayın...</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn-cyber-submit">Onayla ve Kaydet</button>
+        <a href="/Ders/Dersler/" class="btn-cancel">ISLEMI IPTAL ET</a>
+    </form>
+</div>

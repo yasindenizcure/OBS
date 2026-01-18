@@ -4,6 +4,7 @@ using DenemeDers.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DenemeDers.Migrations
 {
     [DbContext(typeof(ContextDb))]
-    partial class ContextDbModelSnapshot : ModelSnapshot
+    [Migration("20260118200147_OgrenciNoMigUpdate")]
+    partial class OgrenciNoMigUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,31 +105,6 @@ namespace DenemeDers.Migrations
                     b.HasIndex("OgretimGorevlisiId");
 
                     b.ToTable("Dersler");
-                });
-
-            modelBuilder.Entity("DenemeDers.Entity.Duyuru", b =>
-                {
-                    b.Property<int>("DuyuruId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DuyuruId"));
-
-                    b.Property<string>("Baslik")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Icerik")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Olusturan")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Tarih")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("DuyuruId");
-
-                    b.ToTable("Duyurular");
                 });
 
             modelBuilder.Entity("DenemeDers.Entity.Not", b =>

@@ -55,7 +55,8 @@ namespace DenemeDers.Controllers
             {
                 new Claim(ClaimTypes.Name, user.AdSoyad),
                 new Claim(ClaimTypes.Role, user.Rol.Trim()),
-                new Claim("UserId", user.AppUserId.ToString())
+                new Claim("UserId", user.AppUserId.ToString()),
+                new Claim("OgrNo", user.KullaniciAdi)
             };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -64,7 +65,6 @@ namespace DenemeDers.Controllers
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(claimsIdentity), authProperties);
 
-                    // Yönlendirme
                     return Yonlendir(user.Rol);
                 }
             }

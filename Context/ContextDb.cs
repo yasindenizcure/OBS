@@ -16,6 +16,7 @@ namespace DenemeDers.Context
         public DbSet<Not> Notlar { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Bolum> Bolumler { get; set; }
+        public DbSet<Duyuru> Duyurular {  get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -24,6 +25,9 @@ namespace DenemeDers.Context
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
+            modelBuilder.Entity<Ogrenci>()
+        .HasIndex(u => u.OgrNo)
+        .IsUnique();
             modelBuilder.Entity<OgretimGorevlisi>()
         .HasOne(x => x.AppUser)
         .WithMany()

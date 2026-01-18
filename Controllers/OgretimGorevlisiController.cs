@@ -18,7 +18,10 @@ namespace DenemeDers.Controllers
         }
         public IActionResult OgrGorevlisi()
         {
-            var ogrgorevlisi = _context.OgretimGorevlileri.Include(x => x.AppUser).ToList();
+            var ogrgorevlisi = _context.OgretimGorevlileri
+                .Include(x => x.AppUser)
+                .Include(x=>x.Bolum)
+                .ToList();
             return View(ogrgorevlisi);
         }
 
@@ -100,7 +103,7 @@ namespace DenemeDers.Controllers
             guncellenecekHoca.Ad = model.Ad;
             guncellenecekHoca.Soyad = model.Soyad;
             guncellenecekHoca.Unvan = model.Unvan;
-            guncellenecekHoca.Bolum = model.Bolum;
+            guncellenecekHoca.BolumId = model.BolumId;
 
             if (guncellenecekHoca.AppUser != null)
             {
@@ -114,6 +117,7 @@ namespace DenemeDers.Controllers
             }
             catch (Exception ex)
             {
+                ViewBag.BolumListesi = new SelectList(_context.Bolumler.ToList(), "BolumId", "BolumAdi", model.BolumId);
                 ModelState.AddModelError("", "Güncelleme sırasında hata oluştu: " + ex.Message);
                 return View(model);
             }

@@ -25,24 +25,6 @@ namespace DenemeDers.Controllers
             return View(kullanıcılar);
         }
 
-        [HttpGet]
-        public IActionResult Ekle()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Ekle(AppUser model)
-        {
-            if (model != null)
-            {
-                _context.AppUsers.Add(model);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(model);
-        }
-
         public IActionResult Sil(int id)
         {
             var user = _context.AppUsers.Find(id);

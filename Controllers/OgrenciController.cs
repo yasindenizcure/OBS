@@ -38,18 +38,28 @@ namespace DenemeDers.Controllers
             ModelState.Remove("AppUser");
             ModelState.Remove("Bolum");
 
+            var varMi = _context.Ogrenciler.Any(x => x.OgrNo == model.OgrNo);
+            if (varMi)
+            {
+                ViewBag.Bolumler = new SelectList(_context.Bolumler, "BolumId", "BolumAdi");
+                ModelState.AddModelError("OgrNo", "Bu öğrenci numarası zaten sisteme kayıtlı.");
+            }
+
             if (ModelState.IsValid)
             {
+                string hamSifre = "123";
+                string hashliSifre = BCrypt.Net.BCrypt.HashPassword(hamSifre);
                 var hesap = new AppUser
                 {
                     AdSoyad = model.Ad + " " + model.Soyad,
                     KullaniciAdi = model.OgrNo,
-                    Sifre = "123", 
+                    Sifre = hashliSifre, 
                     Rol = "Ogrenci"
                 };
 
                 _context.AppUsers.Add(hesap);
-                _context.SaveChanges(); 
+                _context.SaveChanges();
+
                 model.AppUserId = hesap.AppUserId;
                 _context.Ogrenciler.Add(model);
                 _context.SaveChanges();

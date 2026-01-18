@@ -1,229 +1,176 @@
 ﻿@model List<DenemeDers.Entity.Not>
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Not Görüntüleme Paneli";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Not Paneli</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #1e293b;
-            --primary: #4f46e5;
-            --danger: #ef4444;
-            --success: #10b981;
-        }
+<style>
+    .grade-card {
+        background: rgba(16, 18, 27, 0.6);
+        border: 1px solid rgba(99, 102, 241, 0.2);
+        border-radius: 24px;
+        padding: 30px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
 
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            padding: 40px;
-        }
+    .cyber-table {
+        width: 100%;
+        border-collapse: collapse;
+        color: #e2e8f0;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: var(--card);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-        }
-
-        .header-area {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 1.5rem;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
+        .cyber-table th {
             text-align: left;
-            padding: 15px;
-            color: #64748b;
+            padding: 18px;
+            color: #818cf8;
+            font-family: 'Orbitron';
             font-size: 0.75rem;
+            letter-spacing: 1.5px;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.2);
             text-transform: uppercase;
-            border-bottom: 1px solid #f1f5f9;
         }
 
-        td {
-            padding: 18px 15px;
-            border-bottom: 1px solid #f8fafc;
+        .cyber-table td {
+            padding: 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
             font-size: 0.95rem;
         }
 
-        /* Ortalama sayısı için stil */
-        .avg-text {
-            font-weight: 700;
-            color: var(--text);
-        }
-        .letter-badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-weight: 800;
-            font-size: 0.8rem;
-            min-width: 40px;
-            text-align: center;
-            border: 1px solid rgba(0,0,0,0.05);
+        .cyber-table tr:hover td {
+            background: rgba(99, 102, 241, 0.03);
         }
 
-        .btn-back {
-            text-decoration: none;
-            color: #64748b;
-            padding: 10px 18px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border: 1px solid #e2e8f0;
-            transition: all 0.2s ease;
+    .letter-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-family: 'Orbitron';
+        font-weight: 800;
+        font-size: 0.75rem;
+        min-width: 45px;
+        text-align: center;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .btn-cyber {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-family: 'Orbitron';
+        font-size: 0.7rem;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .btn-not-add {
+        background: rgba(99, 102, 241, 0.1);
+        border: 1px solid #818cf8;
+        color: #818cf8;
+    }
+
+        .btn-not-add:hover {
+            background: #818cf8;
+            color: #000;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
         }
 
-            .btn-back:hover {
-                background: #f1f5f9;
-                color: var(--primary);
-                border-color: var(--primary);
-            }
-        .btn-add {
-            text-decoration: none;
-            background: var(--primary);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: 600;
-            transition: opacity 0.2s;
+    .action-link {
+        text-decoration: none;
+        font-family: 'Orbitron';
+        font-size: 0.7rem;
+        font-weight: bold;
+        margin-left: 10px;
+        transition: 0.2s;
+    }
+
+    .edit-link {
+        color: #00e5ff;
+    }
+
+        .edit-link:hover {
+            text-shadow: 0 0 8px #00e5ff;
         }
 
-            .btn-add:hover {
-                opacity: 0.9;
-            }
+    .delete-link {
+        color: #ff3131;
+    }
 
-        .actions {
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
+        .delete-link:hover {
+            text-shadow: 0 0 8px #ff3131;
         }
 
-        .action-link {
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-            transition: color 0.2s;
-        }
+</style>
 
-        .edit-link {
-            color: var(--primary);
-        }
-
-        .delete-link {
-            color: var(--danger);
-        }
-
-        .logout-btn {
-            text-decoration: none;
-            color: var(--danger);
-            border: 2px solid var(--danger);
-            padding: 8px 16px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <div class="header-area">
-            <h1>Not Yönetimi</h1>
-            <div style="display: flex; gap: 15px; align-items: center;">
-                <a href="/Not/NotEkle" class="btn-add">+ Yeni Giriş</a>
-                <a href="/Dashboard/Index" class="btn-back">Geri Dön</a>
-                <a href="/Login/Logout" class="logout-btn">
-                    GÜVENLİ ÇIKIŞ
-                </a>
-            </div>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Öğrenci</th>
-                    <th>Ders</th>
-                    <th>Hoca</th>
-                    <th style="text-align:center">Vize</th>
-                    <th style="text-align:center">Final</th>
-                    <th style="text-align:center">Ortalama</th>
-                    <th style="text-align:center">Harf</th>
-                    <th style="text-align:right">İşlemler</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td><strong>@item.Ogrenci?.Ad @item.Ogrenci?.Soyad</strong></td>
-                        <td>@item.Ders?.DersAdi</td>
-                        <td>@item.OgretimGorevlisi?.Ad @item.OgretimGorevlisi?.Soyad</td>
-                        <td style="text-align:center">@item.VizeNotu</td>
-                        <td style="text-align:center">@item.FinalNotu</td>
-
-                        <td style="text-align:center">
-                            <span class="avg-text">@item.Ortalama.ToString("0.##")</span>
-                        </td>
-
-                        <td style="text-align:center">
-                            @{
-                                double ort = item.Ortalama;
-                                string harf = "";
-                                string bgColor = "";
-                                string textColor = "";
-
-                                if (ort >= 90) { harf = "AA"; bgColor = "#dcfce7"; textColor = "#166534"; }
-                                else if (ort >= 80) { harf = "BA"; bgColor = "#f0fdf4"; textColor = "#16a34a"; }
-                                else if (ort >= 70) { harf = "BB"; bgColor = "#f0fdfa"; textColor = "#0d9488"; }
-                                else if (ort >= 60) { harf = "CB"; bgColor = "#fffbeb"; textColor = "#b45309"; }
-                                else if (ort >= 50) { harf = "CC"; bgColor = "#fff7ed"; textColor = "#c2410c"; }
-                                else { harf = "FF"; bgColor = "#fee2e2"; textColor = "#991b1b"; }
-                            }
-                            <span class="letter-badge" style="background-color: @bgColor; color: @textColor;">
-                                @harf
-                            </span>
-                        </td>
-
-                        <td style="text-align:right">
-                            <div class="actions">
-                                <a href="/Not/NotGuncelle/@item.NotId" class="action-link edit-link">Düzenle</a>
-                                <a href="/Not/NotSil/@item.NotId"
-                                   class="action-link delete-link"
-                                   onclick="return confirm('Bu not kaydını silmek istediğinize emin misiniz?')">Sil</a>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+<div class="page-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 30px;">
+    <div style="border-left: 4px solid #818cf8; padding-left: 15px;">
+        <h2 style="font-family:'Orbitron'; color:#fff; letter-spacing: 2px; margin: 0;">NOT MERKEZİ</h2>
+        <p style="color: #64748b; font-size: 0.8rem; margin-top: 5px;">Öğrencilerin akademik müfredatta aldığı notlar ve harf notu hesaplamaları.</p>
     </div>
-</body>
-</html>
+    <a href="/Not/NotEkle" class="btn-cyber btn-not-add">
+        <i class="fas fa-plus-circle"></i> YENİ NOT GİRİSİ
+    </a>
+</div>
+
+<div class="grade-card">
+    <table class="cyber-table">
+        <thead>
+            <tr>
+                <th>ÖGRENCI</th>
+                <th>DERS ADI</th>
+                <th>SORUMLU HOCA</th>
+                <th style="text-align:center">VIZE</th>
+                <th style="text-align:center">FINAL</th>
+                <th style="text-align:center">ORTALAMA</th>
+                <th style="text-align:center">HARF NOTU</th>
+                <th style="text-align:right">ISLEMLER</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td style="font-weight: 600; color: #fff;">@item.Ogrenci?.Ad @item.Ogrenci?.Soyad</td>
+                    <td style="color: #94a3b8;">@item.Ders?.DersAdi</td>
+                    <td style="font-size: 0.85rem;">@item.OgretimGorevlisi?.Ad @item.OgretimGorevlisi?.Soyad</td>
+                    <td style="text-align:center">@item.VizeNotu</td>
+                    <td style="text-align:center">@item.FinalNotu</td>
+                    <td style="text-align:center">
+                        <span style="color: #818cf8; font-weight: bold; font-family: 'Orbitron';">@item.Ortalama.ToString("0.##")</span>
+                    </td>
+                    <td style="text-align:center">
+                        @{
+                            double ort = item.Ortalama;
+                            string harf = "";
+                            string shadowColor = "";
+                            string textColor = "";
+
+                            if (ort >= 90) { harf = "AA"; shadowColor = "rgba(16, 185, 129, 0.4)"; textColor = "#10b981"; }
+                            else if (ort >= 80) { harf = "BA"; shadowColor = "rgba(16, 185, 129, 0.3)"; textColor = "#34d399"; }
+                            else if (ort >= 70) { harf = "BB"; shadowColor = "rgba(20, 184, 166, 0.3)"; textColor = "#2dd4bf"; }
+                            else if (ort >= 60) { harf = "CB"; shadowColor = "rgba(245, 158, 11, 0.3)"; textColor = "#fbbf24"; }
+                            else if (ort >= 50) { harf = "CC"; shadowColor = "rgba(249, 115, 22, 0.3)"; textColor = "#fb923c"; }
+                            else { harf = "FF"; shadowColor = "rgba(239, 68, 68, 0.4)"; textColor = "#f87171"; }
+                        }
+                        <span class="letter-badge" style="border: 1px solid @textColor; color: @textColor; box-shadow: 0 0 10px @shadowColor;">
+                            @harf
+                        </span>
+                    </td>
+                    <td style="text-align:right">
+                        <a href="/Not/NotGuncelle/@item.NotId" class="action-link edit-link" title="Düzenle">
+                            <i class="fas fa-pen-nib"></i>
+                        </a>
+                        <a href="/Not/NotSil/@item.NotId" class="action-link delete-link" title="Sil"
+                           onclick="return confirm('Bu not kaydı kalıcı olarak silinecek. Emin misiniz?')">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

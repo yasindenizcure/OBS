@@ -1,303 +1,148 @@
-﻿@model List<DenemeDers.Entity.OgretimGorevlisi>
-
+﻿@model IEnumerable<DenemeDers.Entity.OgretimGorevlisi>
 @{
     ViewData["Title"] = "Akademik Kadro";
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    .hoca-card {
+        background: rgba(16, 18, 27, 0.6);
+        border: 1px solid rgba(255, 0, 255, 0.15);
+        border-radius: 24px;
+        padding: 30px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+    .cyber-table {
+        width: 100%;
+        border-collapse: collapse;
+        color: #e2e8f0;
+    }
+
+        .cyber-table th {
+            text-align: left;
+            padding: 18px;
+            color: #ff00ff;
+            font-family: 'Orbitron';
+            font-size: 0.75rem;
+            letter-spacing: 1.5px;
+            border-bottom: 2px solid rgba(255, 0, 255, 0.2);
+            text-transform: uppercase;
         }
 
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background-color: #050505;
-            color: #e0e0e0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow-x: hidden;
+        .cyber-table td {
+            padding: 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 0.95rem;
         }
 
-        .bg-anim {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            background: radial-gradient(circle at center, #18002e 0%, #000000 100%);
+        .cyber-table tr:hover td {
+            background: rgba(255, 0, 255, 0.02);
         }
 
-        .grid-floor {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background-image: linear-gradient(rgba(213, 0, 249, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(213, 0, 249, 0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            transform: perspective(500px) rotateX(20deg);
-            opacity: 0.6;
-            animation: gridMove 20s linear infinite;
+    .unvan-badge {
+        background: rgba(255, 0, 255, 0.1);
+        color: #ff00ff;
+        padding: 4px 12px;
+        border-radius: 8px;
+        font-family: 'Orbitron';
+        font-size: 0.7rem;
+        font-weight: bold;
+        border: 1px solid rgba(255, 0, 255, 0.2);
+        display: inline-block;
+    }
+
+    .btn-cyber {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-family: 'Orbitron';
+        font-size: 0.7rem;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .btn-hoca-add {
+        background: rgba(255, 0, 255, 0.1);
+        border: 1px solid #ff00ff;
+        color: #ff00ff;
+    }
+
+        .btn-hoca-add:hover {
+            background: #ff00ff;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.4);
         }
 
-        @@keyframes gridMove {
-            0%
+    .btn-edit {
+        border: 1px solid #00e5ff;
+        color: #00e5ff;
+        background: rgba(0, 229, 255, 0.05);
+    }
 
-        {
-            background-position: 0 0;
+        .btn-edit:hover {
+            background: #00e5ff;
+            color: #000;
+            box-shadow: 0 0 15px #00e5ff;
         }
 
-        100% {
-            background-position: 0 50px;
+    .btn-delete {
+        border: 1px solid #ff3131;
+        color: #ff3131;
+        background: rgba(255, 49, 49, 0.05);
+    }
+
+        .btn-delete:hover {
+            background: #ff3131;
+            color: #fff;
+            box-shadow: 0 0 15px #ff3131;
         }
+</style>
 
-        }
-
-        .panel-container {
-            width: 95%;
-            max-width: 1200px;
-            background: rgba(20, 10, 35, 0.75);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(213, 0, 249, 0.3);
-            border-radius: 12px;
-            box-shadow: 0 0 40px rgba(213, 0, 249, 0.15);
-            padding: 2.5rem;
-            margin: 2rem 0;
-            position: relative;
-        }
-
-        .top-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(213, 0, 249, 0.2);
-        }
-
-        .logout-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .btn-logout {
-            font-family: 'Orbitron', sans-serif;
-            text-decoration: none;
-            padding: 8px 18px;
-            color: #ff0055;
-            border: 1px solid #ff0055;
-            background: rgba(255, 0, 85, 0.05);
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-            .btn-logout:hover {
-                background: #ff0055;
-                color: #fff;
-                box-shadow: 0 0 15px #ff0055;
-                transform: scale(1.05);
-            }
-
-        h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.2rem;
-            color: #d500f9;
-            text-shadow: 0 0 15px rgba(213, 0, 249, 0.6);
-            letter-spacing: 3px;
-        }
-
-        .btn-new-record {
-            font-family: 'Orbitron', sans-serif;
-            text-decoration: none;
-            padding: 10px 20px;
-            color: #00e5ff;
-            border: 1px solid #00e5ff;
-            background: rgba(0, 229, 255, 0.1);
-            border-radius: 4px;
-            font-size: 0.85rem;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-            .btn-new-record:hover {
-                background: #00e5ff;
-                color: #000;
-                box-shadow: 0 0 20px #00e5ff;
-            }
-
-        .cyber-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 10px;
-        }
-
-            .cyber-table th {
-                font-family: 'Orbitron', sans-serif;
-                text-align: left;
-                color: #b388ff;
-                padding: 15px;
-                font-size: 0.9rem;
-                border-bottom: 2px solid #b388ff;
-            }
-
-            .cyber-table tbody tr {
-                background: rgba(255, 255, 255, 0.03);
-                transition: 0.3s;
-            }
-
-                .cyber-table tbody tr:hover {
-                    background: rgba(213, 0, 249, 0.1);
-                    transform: scale(1.01);
-                }
-
-            .cyber-table td {
-                padding: 15px;
-                color: #fff;
-                font-size: 1rem;
-                border-top: 1px solid rgba(255, 255, 255, 0.05);
-            }
-
-        .btn-action {
-            text-decoration: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.7rem;
-            transition: 0.3s;
-            margin-left: 5px;
-        }
-
-        .btn-back-dashboard {
-            font-family: 'Orbitron', sans-serif;
-            text-decoration: none;
-            padding: 8px 18px;
-            color: #d500f9;
-            border: 1px solid #d500f9;
-            background: rgba(213, 0, 249, 0.05);
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-            .btn-back-dashboard:hover {
-                background: #d500f9;
-                color: #000;
-                box-shadow: 0 0 15px #d500f9;
-                transform: scale(1.05);
-            }
-        .btn-edit-table {
-            color: #ffaa00;
-            border: 1px solid #ffaa00;
-            background: rgba(255, 170, 0, 0.05);
-        }
-
-            .btn-edit-table:hover {
-                background: #ffaa00;
-                color: #000;
-                box-shadow: 0 0 10px #ffaa00;
-            }
-
-        .btn-del-table {
-            color: #ff0055;
-            border: 1px solid #ff0055;
-            background: rgba(255, 0, 85, 0.05);
-        }
-
-            .btn-del-table:hover {
-                background: #ff0055;
-                color: #fff;
-                box-shadow: 0 0 10px #ff0055;
-            }
-    </style>
-</head>
-<body>
-
-    <div class="bg-anim"></div>
-    <div class="grid-floor"></div>
-
-    <div class="panel-container">
-        <div class="top-nav">
-            <a href="/Dashboard/Index" class="btn-back-dashboard">
-                <i class="fas fa-chevron-left"></i> GERİ DÖN
-            </a>
-
-            <h1>AKADEMİK KADRO</h1>
-
-            <div class="logout-wrapper">
-                <a href="/OgretimGorevlisi/OgrGorevlisiKayit" class="btn-new-record">
-                    <i class="fas fa-plus"></i> YENİ HOCA
-                </a>
-                <a href="/Login/Logout" class="btn-logout">
-                    <i class="fas fa-sign-out-alt"></i> GÜVENLİ ÇIKIŞ
-                </a>
-            </div>
-        </div>
-
-        <table class="cyber-table">
-            <thead>
-                <tr>
-                    <th>ADI</th>
-                    <th>SOYADI</th>
-                    <th>BÖLÜMÜ</th>
-                    <th>UNVAN</th>
-                    <th style="text-align: right;">İŞLEMLER</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model != null && Model.Any())
-                {
-                    @foreach (var hoca in Model)
-                    {
-                        <tr>
-                            <td>@hoca.Ad</td>
-                            <td>@hoca.Soyad</td>
-                            <td style="color: #bbb;">@hoca.Bolum</td>
-                            <td style="color: #bbb;">@hoca.Unvan</td>
-                            <td style="text-align: right;">
-                                <a href="/OgretimGorevlisi/OgrGorevlisiGuncelle/@hoca.OgretimGorevlisiId" class="btn-action btn-edit-table">DÜZENLE</a>
-                                <a href="/OgretimGorevlisi/OgrGorevlisiSil/@hoca.OgretimGorevlisiId" class="btn-action btn-del-table" onclick="return confirm('@hoca.Ad @hoca.Soyad kaydını silmek istediğinize emin misiniz?');">SİL</a>
-                            </td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="5" style="text-align: center; padding: 3rem; color: #ff0055; font-family: 'Orbitron';">SİSTEMDE KAYITLI VERİ BULUNAMADI.</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+<div class="page-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 30px;">
+    <div style="border-left: 4px solid #ff00ff; padding-left: 15px;">
+        <h2 style="font-family:'Orbitron'; color:#fff; letter-spacing: 2px; margin: 0;">AKADEMIK KADRO YÖNETİMİ</h2>
+        <p style="color: #64748b; font-size: 0.8rem; margin-top: 5px;">Sistemde kayıtlı hoca ve akademik yetkililerin listesi.</p>
     </div>
+    <a href="/OgretimGorevlisi/OgrGorevlisiKayit" class="btn-cyber btn-hoca-add">
+        <i class="fas fa-user-plus"></i> YENİ HOCA TANIMLA
+    </a>
+</div>
 
-</body>
-</html>
+<div class="hoca-card">
+    <table class="cyber-table">
+        <thead>
+            <tr>
+                <th style="width: 150px;">UNVAN</th>
+                <th>AD SOYAD</th>
+                <th>BÖLÜM</th>
+                <th style="text-align:right">İSLEMLER</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><span class="unvan-badge">@item.Unvan</span></td>
+                    <td style="font-weight: 600;">@item.Ad @item.Soyad</td>
+                    <td style="color: #94a3b8;">
+                        <i class="fas fa-university" style="margin-right: 8px; font-size: 0.8rem;"></i>
+                        @(item.Bolum?.BolumAdi ?? "Atanmamış")
+                    </td>
+                    <td style="text-align:right; display: flex; justify-content: flex-end; gap: 10px;">
+                        <a href="/OgretimGorevlisi/OgrGorevlisiGuncelle/@item.OgretimGorevlisiId" class="btn-cyber btn-edit">
+                            <i class="fas fa-user-edit"></i> DÜZENLE
+                        </a>
+                        <a href="/OgretimGorevlisi/OgrGorevlisiSil/@item.OgretimGorevlisiId" class="btn-cyber btn-delete" onclick="return confirm('Bu personeli ve bağlı login hesabını silmek istediğinize emin misiniz?')">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

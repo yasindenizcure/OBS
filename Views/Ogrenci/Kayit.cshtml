@@ -1,201 +1,195 @@
 ﻿@model DenemeDers.Entity.Ogrenci
 
 @{
-    ViewData["Title"] = "Öğrenci Kaydı";
-    Layout = null;
+    ViewData["Title"] = "Öğrenci Kayıt Paneli";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Öğrenci Kayıt Paneli</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --primary: #6366f1;
-            --text-dark: #1e293b;
-            --text-muted: #64748b;
-            --input-border: #e2e8f0;
-        }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<style>
+    .register-container {
+        max-width: 600px;
+        margin: 20px auto;
+        background: rgba(16, 18, 27, 0.8);
+        border: 1px solid rgba(0, 243, 255, 0.15);
+        border-radius: 24px;
+        padding: 40px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    }
 
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-color);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--text-dark);
-        }
+    .form-header {
+        border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        text-align: center;
+    }
 
-        .form-container {
-            width: 100%;
-            max-width: 500px;
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        h1 {
+        .form-header h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00f3ff;
             font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 8px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
         }
 
-        .subtitle {
-            color: var(--text-muted);
+        .form-header p {
+            color: #64748b;
             font-size: 0.9rem;
         }
 
-        .form-group {
-            margin-bottom: 20px;
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .full-width {
+        grid-column: span 2;
+    }
+
+    .form-label {
+        display: block;
+        font-family: 'Orbitron';
+        font-size: 0.7rem;
+        color: #64748b;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        color: #fff;
+        font-family: inherit;
+        transition: all 0.3s ease;
+    }
+
+    select.form-control option {
+        background-color: #11121a;
+        color: #fff;
+    }
+
+    .form-control:focus {
+        border-color: #00f3ff;
+        background: rgba(0, 243, 255, 0.05);
+        box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+        outline: none;
+    }
+
+    select.form-control {
+        appearance: none;
+        background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%2300f3ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 14px;
+    }
+
+    .btn-cyber-submit {
+        width: 100%;
+        padding: 15px;
+        background: #00f3ff;
+        color: #000;
+        border: none;
+        border-radius: 12px;
+        font-family: 'Orbitron';
+        font-weight: bold;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 20px;
+    }
+
+        .btn-cyber-submit:hover {
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+            transform: translateY(-2px);
         }
 
-        .form-label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 8px;
+    .btn-cancel {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+        color: #64748b;
+        text-decoration: none;
+        font-size: 0.8rem;
+        font-family: 'Orbitron';
+        transition: 0.3s;
+    }
+
+        .btn-cancel:hover {
+            color: #ff3131;
         }
 
-        .form-control {
-            width: 100%;
-            padding: 12px 16px;
-            background: #f8fafc;
-            border: 1px solid var(--input-border);
-            border-radius: 12px;
-            outline: none;
-            transition: all 0.2s ease;
-        }
+    .error-msg {
+        color: #ff3131;
+        font-size: 0.7rem;
+        margin-top: 5px;
+        font-family: 'Orbitron';
+    }
+</style>
 
-            .form-control:focus {
-                border-color: var(--primary);
-                background: #fff;
-                box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-            }
+<div class="register-container">
+    <div class="form-header">
+        <h1>Yeni Öğrenci Kaydı</h1>
+        <p>Sistem veritabanına yeni protokol ekleyin</p>
+    </div>
 
-        .form-row {
-            display: flex;
-            gap: 15px;
-        }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div style="background: rgba(255, 49, 49, 0.1); border: 1px solid #ff3131; color: #ff3131; padding: 12px; border-radius: 10px; margin-bottom: 20px; font-size: 0.8rem; text-align: center;">
+            <i class="fas fa-exclamation-triangle"></i> @TempData["ErrorMessage"]
+        </div>
+    }
 
-            .form-row .form-group {
-                flex: 1;
-            }
-
-        select.form-control {
-            appearance: none;
-            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%2364748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 14px;
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 14px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-            .btn-submit:hover {
-                transform: translateY(-1px);
-                box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
-            }
-
-        .btn-back {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.85rem;
-        }
-
-        .error-msg {
-            color: #ef4444;
-            font-size: 0.75rem;
-            margin-top: 5px;
-            display: block;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="form-container">
-        <header>
-            <h1>Öğrenci Kaydı</h1>
-            <p class="subtitle">Sistem veritabanına yeni öğrenci ekleyin</p>
-        </header>
-
-        <form method="post" asp-action="Kayit">
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label">Ad</label>
-                    <input type="text" class="form-control" asp-for="Ad" required placeholder="Ali">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Soyad</label>
-                    <input type="text" class="form-control" asp-for="Soyad" required placeholder="Yılmaz">
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label">Yaş</label>
-                    <input type="number" class="form-control" asp-for="Yas" required placeholder="20">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Numara</label>
-                    <input type="text" class="form-control" asp-for="OgrNo" required placeholder="1234...">
-                </div>
+    <form method="post" asp-action="Kayit">
+        <div class="form-grid">
+            <div class="form-group">
+                <label class="form-label">Ad</label>
+                <input type="text" class="form-control" asp-for="Ad" required placeholder="Ali">
             </div>
 
             <div class="form-group">
+                <label class="form-label">Soyad</label>
+                <input type="text" class="form-control" asp-for="Soyad" required placeholder="Yılmaz">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">YAS</label>
+                <input type="number" class="form-control" asp-for="Yas" required placeholder="20">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">ÖGRENCI NUMARASI</label>
+                <input type="text" class="form-control" asp-for="OgrNo" required placeholder="Örn: 2024001">
+                <span asp-validation-for="OgrNo" class="error-msg"></span>
+            </div>
+
+            <div class="form-group full-width">
+                <label class="form-label">Bölüm</label>
+                <select class="form-control" asp-for="BolumId" asp-items="ViewBag.Bolumler" required>
+                    <option value="" disabled selected>Bölüm seçin...</option>
+                </select>
+                <span class="error-msg">@Html.ValidationMessageFor(m => m.BolumId)</span>
+            </div>
+
+            <div class="form-group full-width">
                 <label class="form-label">Sınıf</label>
                 <select class="form-control" asp-for="Sinif" required>
-                    <option value="" disabled selected>Sınıf düzeyi seçin</option>
+                    <option value="" disabled selected>Sınıf seçin...</option>
                     <option value="1">1. Sınıf</option>
                     <option value="2">2. Sınıf</option>
                     <option value="3">3. Sınıf</option>
                     <option value="4">4. Sınıf</option>
                 </select>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label class="form-label">Bölüm</label>
-                <select class="form-control" asp-for="BolumId" asp-items="ViewBag.Bolumler" required>
-                    <option value="" disabled selected>Eğitim bölümü seçin</option>
-                </select>
-                <span class="error-msg">@Html.ValidationMessageFor(m => m.BolumId)</span>
-            </div>
+        <button type="submit" class="btn-cyber-submit">Onayla ve Kaydet</button>
 
-            <button type="submit" class="btn-submit">Bilgileri Sisteme Kaydet</button>
-
-            <a href="/Ogrenci/Index/" class="btn-back">Vazgeç ve Listeye Dön</a>
-        </form>
-    </div>
-
-</body>
-</html>
+        <a href="/Ogrenci/Index/" class="btn-cancel">ISLEMI IPTAL ET</a>
+    </form>
+</div>

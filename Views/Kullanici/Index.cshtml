@@ -1,210 +1,193 @@
-﻿@model List<AppUser>
+﻿@model List<DenemeDers.Entity.AppUser>
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Kullanıcı Yönetimi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kullanıcı Yönetimi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    .security-card {
+        background: rgba(10, 11, 16, 0.7);
+        border: 1px solid rgba(0, 243, 255, 0.15);
+        border-radius: 24px;
+        padding: 30px;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+        position: relative;
+        overflow: hidden;
+    }
 
-    <style>
-        :root {
-            --cyan: #00f3ff;
-            --magenta: #ff00ff;
-            --bg-dark: #050505;
-            --border: rgba(0, 243, 255, 0.2);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background-color: var(--bg-dark);
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            padding: 40px 20px;
-            background-image: radial-gradient(circle at 50% 50%, #101015 0%, #000 100%);
-        }
-
-        .panel-container {
+        .security-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-width: 1100px;
-            background: rgba(10, 10, 15, 0.8);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--border);
-            padding: 30px;
-            position: relative;
-            clip-path: polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%);
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
         }
 
-        .header-area {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 20px;
-        }
+    .cyber-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+        color: #e2e8f0;
+    }
 
-        h1 {
+        .cyber-table th {
+            text-align: left;
+            padding: 15px;
+            color: var(--accent);
             font-family: 'Orbitron';
-            color: var(--cyan);
-            text-shadow: 0 0 10px var(--cyan);
-            font-size: 1.5rem;
+            font-size: 0.75rem;
             letter-spacing: 2px;
-        }
-
-        .btn-add {
-            text-decoration: none;
-            font-family: 'Orbitron';
-            color: var(--cyan);
-            border: 1px solid var(--cyan);
-            padding: 8px 16px;
-            font-size: 0.8rem;
-            transition: 0.3s;
-            background: rgba(0, 243, 255, 0.05);
-        }
-
-            .btn-add:hover {
-                background: var(--cyan);
-                color: #000;
-                box-shadow: 0 0 15px var(--cyan);
-            }
-
-        .cyber-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 10px;
-        }
-
-            .cyber-table th {
-                text-align: left;
-                font-family: 'Orbitron';
-                color: var(--cyan);
-                padding: 15px;
-                font-size: 0.8rem;
-                border-bottom: 1px solid var(--border);
-            }
-
-            .cyber-table tr {
-                background: rgba(255, 255, 255, 0.02);
-                transition: 0.3s;
-            }
-
-                .cyber-table tr:hover {
-                    background: rgba(0, 243, 255, 0.05);
-                    transform: translateX(5px);
-                }
-
-            .cyber-table td {
-                padding: 15px;
-                border-top: 1px solid rgba(255, 255, 255, 0.05);
-            }
-
-        .role-badge {
-            font-family: 'Orbitron';
-            font-size: 0.7rem;
-            padding: 4px 10px;
-            border: 1px solid;
             text-transform: uppercase;
+            border-bottom: 1px solid rgba(0, 243, 255, 0.1);
         }
 
-        .role-hoca {
-            color: var(--magenta);
-            border-color: var(--magenta);
+        .cyber-table tr {
+            background: rgba(255, 255, 255, 0.02);
+            transition: 0.3s all ease;
         }
 
-        .role-memur {
-            color: var(--cyan);
-            border-color: var(--cyan);
-        }
-
-        .role-ogrenci {
-            color: #ffcc00;
-            border-color: #ffcc00;
-        }
-
-        .btn-delete {
-            color: #ff003c;
-            text-decoration: none;
-            font-weight: bold;
-            font-family: 'Orbitron';
-            font-size: 0.7rem;
-            border: 1px solid #ff003c;
-            padding: 5px 10px;
-            transition: 0.3s;
-        }
-
-            .btn-delete:hover {
-                background: #ff003c;
-                color: #fff;
-                box-shadow: 0 0 10px #ff003c;
+            .cyber-table tr:hover {
+                background: rgba(0, 243, 255, 0.05);
+                transform: scale(1.005);
             }
 
-        .status-online {
-            color: #00ff00;
-            font-size: 0.7rem;
-            font-family: 'Orbitron';
+        .cyber-table td {
+            padding: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-    </style>
-</head>
-<body>
 
-    <div class="panel-container">
-        <div class="header-area">
-            <h1>KULLANICI YONETIMI</h1>
-            <div style="display:flex; gap:10px;">
-                <a href="/Kullanici/Ekle" class="btn-add">+ YENİ_KAYIT</a>
-                <a href="/Dashboard/Index" class="btn-add" style="border-color:#fff; color:#fff;">GERİ_DÖN</a>
-            </div>
-        </div>
+            .cyber-table td:first-child {
+                border-left: 1px solid rgba(255, 255, 255, 0.05);
+                border-radius: 12px 0 0 12px;
+            }
 
-        <table class="cyber-table">
-            <thead>
-                <tr>
-                    <th>ERİŞİM_İSMİ</th>
-                    <th>KULLANICI_KODU</th>
-                    <th>YETKİ_DÜZEYİ</th>
-                    <th>DURUM</th>
-                    <th style="text-align:right">İŞLEMLER</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var user in Model)
-                {
-                    <tr>
-                        <td style="font-weight: 600;">@user.AdSoyad</td>
-                        <td style="color: #94a3b8;">@user.KullaniciAdi</td>
-                        <td>
-                            <span class="role-badge role-@user.Rol.ToLower().Trim()">
-                                @user.Rol
-                            </span>
-                        </td>
-                        <td><span class="status-online">// AKTİF</span></td>
-                        <td style="text-align:right">
-                            <a href="/Kullanici/Sil/@user.AppUserId"
-                               class="btn-delete"
-                               onclick="return confirm('BU KULLANICININ ERİŞİMİNİ İPTAL ETMEK İSTEDİĞİNİZE EMİN MİSİNİZ?')">
-                                ERİŞİMİ_KES
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+            .cyber-table td:last-child {
+                border-right: 1px solid rgba(255, 255, 255, 0.05);
+                border-radius: 0 12px 12px 0;
+            }
+
+    .role-badge {
+        font-family: 'Orbitron';
+        font-size: 0.65rem;
+        padding: 5px 12px;
+        border-radius: 6px;
+        border: 1px solid;
+        text-transform: uppercase;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    .role-admin {
+        color: #ff00ff;
+        border-color: rgba(255, 0, 255, 0.3);
+        background: rgba(255, 0, 255, 0.05);
+    }
+
+    .role-hoca {
+        color: #818cf8;
+        border-color: rgba(129, 140, 248, 0.3);
+        background: rgba(129, 140, 248, 0.05);
+    }
+
+    .role-memur {
+        color: #00f3ff;
+        border-color: rgba(0, 243, 255, 0.3);
+        background: rgba(0, 243, 255, 0.05);
+    }
+
+    .role-ogrenci {
+        color: #fbbf24;
+        border-color: rgba(251, 191, 36, 0.3);
+        background: rgba(251, 191, 36, 0.05);
+    }
+
+    .btn-cyber {
+        font-family: 'Orbitron';
+        font-size: 0.7rem;
+        padding: 8px 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: 0.3s;
+        font-weight: bold;
+    }
+
+    .btn-terminate {
+        color: #ff3131;
+        border: 1px solid rgba(255, 49, 49, 0.4);
+        background: rgba(255, 49, 49, 0.05);
+    }
+
+        .btn-terminate:hover {
+            background: #ff3131;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 49, 49, 0.5);
+        }
+
+    .status-active {
+        color: #4ade80;
+        font-family: 'Orbitron';
+        font-size: 0.7rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+        .status-active::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            background: #4ade80;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #4ade80;
+        }
+</style>
+
+<div class="page-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 30px;">
+    <div style="border-left: 4px solid var(--accent); padding-left: 15px;">
+        <h2 style="margin:0;">KULLANICI YÖNETİMİ</h2>
+        <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 5px;">Kullanıcı veri tabanı ve yetkililer.</p>
     </div>
+</div>
 
-</body>
-</html>
+<div class="security-card">
+    <table class="cyber-table">
+        <thead>
+            <tr>
+                <th>ERİSİM KİMLİGİ</th>
+                <th>KULLANICI ADI</th>
+                <th>YETKİ SEVİYESİ</th>
+                <th>DURUM</th>
+                <th style="text-align:right">İSLEMLER</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td style="font-weight: 600; color: #fff;">@user.AdSoyad.ToUpper()</td>
+                    <td style="color: #94a3b8; font-family: monospace;">@user.KullaniciAdi</td>
+                    <td>
+                        <span class="role-badge role-@user.Rol.ToLower().Trim()">
+                            @user.Rol
+                        </span>
+                    </td>
+                    <td>
+                        <span class="status-active">ONLINE</span>
+                    </td>
+                    <td style="text-align:right">
+                        <a href="/Kullanici/Sil/@user.AppUserId"
+                           class="btn-cyber btn-terminate"
+                           onclick="return confirm('DİKKAT: BU KULLANICININ TÜM ERİŞİM YETKİLERİ İPTAL EDİLECEK. ONAYLIYOR MUSUNUZ?')">
+                            ERISIMI KES
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

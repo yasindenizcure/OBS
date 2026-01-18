@@ -1,366 +1,287 @@
 ﻿@using System.Security.Claims
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var role = User.FindFirst(ClaimTypes.Role)?.Value?.ToLower().Trim();
 }
 
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Komuta Merkezi // Kontrol Paneli</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --cyan: #00f3ff;
-            --magenta: #ff00ff;
-            --gold: #ffcc00;
-            --red: #ff3131;
-            --amber: #ff8e00;
-            --bg-dark: #0a0b10;
-            --card-bg: rgba(16, 18, 27, 0.7);
-        }
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        * {
+<style>
+    :root {
+        --panel-bg: rgba(13, 14, 20, 0.85);
+        --panel-border: rgba(0, 243, 255, 0.15);
+    }
+
+    .op-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        padding: 0 10px;
+    }
+
+        .op-header h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+            color: var(--accent);
             margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
         }
 
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background-color: var(--bg-dark);
-            color: #fff;
-            min-height: 100vh;
+    .top-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+
+    .action-panel {
+        background: var(--panel-bg);
+        border: 1px solid var(--panel-border);
+        border-radius: 12px;
+        padding: 20px;
+        backdrop-filter: blur(15px);
+        display: flex;
+        flex-direction: column;
+    }
+
+        .action-panel h3 {
+            font-family: 'Orbitron';
+            font-size: 0.75rem;
+            margin-bottom: 15px;
+            color: var(--accent);
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        .bg-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 30%, rgba(0, 243, 255, 0.05) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(255, 0, 255, 0.05) 0%, transparent 40%);
-            z-index: -1;
-        }
-
-        .cyber-grid {
-            position: fixed;
-            width: 200%;
-            height: 200%;
-            background-image: linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
-            transform: perspective(1000px) rotateX(60deg) translateY(-100px);
-            bottom: -50%;
-            z-index: -1;
-            animation: moveGrid 20s linear infinite;
-        }
-
-        @@keyframes moveGrid {
-            from {
-                background-position: 0 0;
-            }
-
-            to {
-                background-position: 0 50px;
-            }
-        }
-
-        .status-bar {
-            position: absolute;
-            top: 0;
-            width: 100%;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.5);
-            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
-            backdrop-filter: blur(10px);
-            z-index: 100;
-        }
-
-        .system-info {
-            font-family: 'Orbitron';
-            font-size: 0.8rem;
-            color: var(--cyan);
-            letter-spacing: 2px;
-        }
-
-        .cyber-logout {
-            text-decoration: none;
-            color: var(--red);
-            border: 1px solid var(--red);
-            padding: 8px 20px;
-            font-family: 'Orbitron';
-            font-size: 0.7rem;
-            transition: 0.3s;
-            background: rgba(255, 49, 49, 0.05);
-            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
-        }
-
-            .cyber-logout:hover {
-                background: var(--red);
-                color: #000;
-                box-shadow: 0 0 20px var(--red);
-            }
-
-        .header-section {
-            text-align: center;
-            margin-bottom: 40px;
-            margin-top: 50px;
-        }
-
-        h1 {
-            font-family: 'Orbitron';
-            font-size: 3rem;
-            font-weight: 900;
+            gap: 8px;
             text-transform: uppercase;
-            letter-spacing: 6px;
-            background: linear-gradient(to bottom, #fff 0%, var(--cyan) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 10px rgba(0, 243, 255, 0.5));
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 8px;
         }
 
-        .role-badge {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 5px 15px;
-            background: rgba(0, 243, 255, 0.1);
-            border-left: 3px solid var(--cyan);
+    .announcement-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-height: 160px;
+        overflow-y: auto;
+    }
+
+    .announcement-item {
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.02);
+        border-left: 3px solid var(--secondary);
+        font-size: 0.8rem;
+        line-height: 1.4;
+    }
+
+        .announcement-item span {
+            display: block;
+            color: #64748b;
+            font-size: 0.6rem;
+            margin-top: 4px;
             font-family: 'Orbitron';
-            font-size: 0.8rem;
-            color: var(--cyan);
         }
 
-        .dashboard-container {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-            width: 98%;
-            max-width: 1400px;
-            padding: 10px;
-            perspective: 1000px;
+    .action-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .action-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 15px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 6px;
+        text-decoration: none;
+        color: #e2e8f0;
+        transition: 0.2s;
+        font-size: 0.8rem;
+    }
+
+        .action-item:hover {
+            background: rgba(0, 243, 255, 0.08);
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
-        .card {
-            position: relative;
-            height: 280px;
-            background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            color: #fff;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
+    .bottom-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+    }
 
-            .card:hover {
-                transform: translateY(-10px);
-                border-color: var(--active-color);
-                box-shadow: 0 0 25px var(--active-shadow);
-            }
+    .chart-panel {
+        background: var(--panel-bg);
+        border: 1px solid var(--panel-border);
+        border-radius: 12px;
+        padding: 20px;
+    }
 
-            .card i {
-                font-size: 2.5rem;
-                margin-bottom: 15px;
-                transition: 0.3s;
-                filter: drop-shadow(0 0 8px var(--active-color));
-            }
+    .log-terminal {
+        background: #000;
+        border-radius: 6px;
+        padding: 12px;
+        font-family: 'monospace';
+        font-size: 0.7rem;
+        color: #4ade80;
+        height: 120px;
+        overflow-y: auto;
+        border: 1px solid rgba(74, 222, 128, 0.1);
+    }
 
-            .card h2 {
-                font-family: 'Orbitron';
-                font-size: 0.9rem;
-                margin-bottom: 10px;
-                letter-spacing: 1.5px;
-                color: var(--active-color);
-            }
+    .log-line {
+        margin-bottom: 5px;
+        opacity: 0.8;
+    }
+</style>
 
-            .card p {
-                font-size: 0.75rem;
-                text-align: center;
-                color: #999;
-                padding: 0 10px;
-                line-height: 1.3;
-            }
-
-        .c-student {
-            --active-color: var(--cyan);
-            --active-shadow: rgba(0, 243, 255, 0.3);
-        }
-
-            .c-student i {
-                color: var(--cyan);
-            }
-
-        .c-teacher {
-            --active-color: var(--magenta);
-            --active-shadow: rgba(255, 0, 255, 0.3);
-        }
-
-            .c-teacher i {
-                color: var(--magenta);
-            }
-
-        .c-lesson {
-            --active-color: var(--gold);
-            --active-shadow: rgba(255, 204, 0, 0.3);
-        }
-
-            .c-lesson i {
-                color: var(--gold);
-            }
-
-        .c-dept {
-            --active-color: var(--amber);
-            --active-shadow: rgba(255, 142, 0, 0.3);
-        }
-
-            .c-dept i {
-                color: var(--amber);
-            }
-
-        .c-users {
-            --active-color: var(--red);
-            --active-shadow: rgba(255, 49, 49, 0.3);
-        }
-
-            .c-users i {
-                color: var(--red);
-            }
-
-        .scanline {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: rgba(0, 243, 255, 0.03);
-            z-index: 1000;
-            pointer-events: none;
-            animation: scan 4s linear infinite;
-        }
-
-        @@keyframes scan {
-            0% {
-                top: -5px;
-            }
-
-            100% {
-                top: 100%;
-            }
-        }
-
-        @@media (max-width: 1100px) {
-            .dashboard-container {
-                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            }
-        }
-
-        @@media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-
-            body {
-                overflow-y: auto;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="bg-overlay"></div>
-    <div class="cyber-grid"></div>
-    <div class="scanline"></div>
-
-    <div class="status-bar">
-        <div class="system-info">
-            <i class="fas fa-microchip"></i> KULLANICI: @User.Identity.Name.ToUpper() // STATUS: ONLINE
-        </div>
-        <a href="/Login/Logout" class="cyber-logout">
-            <i class="fas fa-power-off"></i> DISCONNECT
-        </a>
+<div class="op-header">
+    <h2>Dashboard</h2>
+    <div style="font-family: 'Orbitron'; font-size: 0.7rem; color: #64748b;">
+        DURUM: <span style="color: #4ade80;">AKTİF</span>
     </div>
+</div>
 
-    <div class="header-section">
-        <h1>KOMUTA MERKEZİ</h1>
-        <div class="role-badge">
-            <i class="fas fa-shield-alt"></i> ACCESS_LEVEL: @User.FindFirst(ClaimTypes.Role)?.Value.ToUpper()
-        </div>
-    </div>
-
-    <div class="dashboard-container">
-        @{
-            var role = User.FindFirst(ClaimTypes.Role)?.Value?.ToLower().Trim();
-        }
-
-        @if (role == "admin" || role == "memur")
-        {
-            <a href="/Ogrenci/Index" class="card c-student">
-                <i class="fas fa-user-graduate"></i>
-                <h2>ÖĞRENCİLER</h2>
-                <p>Veritabanı erişimi ve kayıt terminali.</p>
-            </a>
-
-            <a href="/OgretimGorevlisi/OgrGorevlisi" class="card c-teacher">
-                <i class="fas fa-user-tie"></i>
-                <h2>AKADEMİK</h2>
-                <p>Personel atama ve yetki modülleri.</p>
-            </a>
-
-            <a href="/Ders/Dersler" class="card c-lesson">
-                <i class="fas fa-project-diagram"></i>
-                <h2>MÜFREDAT</h2>
-                <p>Eğitim programı ve ders planlama.</p>
-            </a>
-
+<div class="top-grid">
+    <div class="action-panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h3 style="margin:0;"><i class="fas fa-bullhorn"></i> SİSTEM DUYURULARI</h3>
             @if (role == "admin")
             {
-                <a href="/Bolum/BolumListesi" class="card c-dept">
-                    <i class="fas fa-network-wired"></i>
-                    <h2>BÖLÜMLER</h2>
-                    <p>Birim yapılandırma ve organizasyon.</p>
-                </a>
-
-                <a href="/Kullanici/Index" class="card c-users">
-                    <i class="fas fa-users-cog"></i>
-                    <h2>KULLANICILAR</h2>
-                    <p>Sistem erişim ve hesap protokolleri.</p>
-                </a>
+                <a href="/Dashboard/DuyuruYayinla" title="Yeni Duyuru" style="color:var(--accent); font-size:0.8rem;"><i class="fas fa-plus-square"></i></a>
             }
-        }
+        </div>
+        <div class="announcement-list">
+            @if (ViewBag.Duyurular != null && ((List<DenemeDers.Entity.Duyuru>)ViewBag.Duyurular).Any())
+            {
+                foreach (var item in (List<DenemeDers.Entity.Duyuru>)ViewBag.Duyurular)
+                {
+                    <div class="announcement-item">
+                        @item.Icerik
+                        <span>@item.Tarih.ToString("dd MMMM yyyy - HH:mm")</span>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="announcement-item" style="border-left-color:#475569;">
+                    Henüz yayınlanmış bir duyuru bulunmuyor.
+                </div>
+            }
+        </div>
     </div>
 
-    <script>
-        document.querySelectorAll('.card').forEach(card => {
-            card.addEventListener('mousemove', e => {
-                let rect = card.getBoundingClientRect();
-                let x = e.clientX - rect.left;
-                let y = e.clientY - rect.top;
-                let centerX = rect.width / 2;
-                let centerY = rect.height / 2;
-                let rotateX = (y - centerY) / 15;
-                let rotateY = (centerX - x) / 15;
-                card.style.transform = `translateY(-10px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            });
+    <div class="action-panel">
+        <h3><i class="fas fa-bolt"></i> HIZLI İSLEMLER</h3>
+        <div class="action-list">
+            <a href="/Ogrenci/Kayit" class="action-item"><span>Öğrenci Kaydı</span><i class="fas fa-plus"></i></a>
+            <a href="/OgretimGorevlisi/OgrGorevlisiKayit" class="action-item"><span>Hoca Tanımla</span><i class="fas fa-plus"></i></a>
+            @if (role == "admin")
+            {
+                <a href="/Bolum/BolumEkle" class="action-item"><span>Yeni Bölüm</span><i class="fas fa-folder-plus"></i></a>
+            }
+        </div>
+    </div>
 
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = `translateY(0) rotateX(0) rotateY(0)`;
-            });
-        });
-    </script>
-</body>
-</html>
+    <div class="action-panel">
+        <h3><i class="fas fa-shield-halved"></i> GÜVENLİK</h3>
+        <div class="action-list">
+            <div class="action-item">
+                <span>Erişim Yetkisi</span>
+                <span style="color: var(--accent); font-family: 'Orbitron'; font-size: 0.6rem;">@role?.ToUpper()</span>
+            </div>
+            <a href="/OgretimGorevlisi/SifreleriTopluHashle" class="action-item"><span>Veri Şifreleme</span><i class="fas fa-lock"></i></a>
+        </div>
+    </div>
+</div>
+
+<div class="bottom-grid">
+    <div class="chart-panel">
+        <h3 style="font-family:'Orbitron'; font-size:0.8rem; color:var(--accent); margin-bottom:15px;">
+            <i class="fas fa-chart-bar"></i> AKADEMİK BASARI ANALİZİ
+        </h3>
+        <div style="height: 250px;">
+            <canvas id="performanceChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-panel">
+        <h3 style="font-family:'Orbitron'; font-size:0.8rem; color:var(--accent); margin-bottom:15px;">
+            <i class="fas fa-chart-pie"></i> SİSTEM DAGILIMI
+        </h3>
+        <div style="height: 250px;">
+            <canvas id="systemChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="action-panel" style="margin-top:20px;">
+    <h3><i class="fas fa-terminal"></i> SON SİSTEM HAREKETLERİ</h3>
+    <div class="log-terminal">
+        @if (ViewBag.SonIslemler != null)
+        {
+            foreach (var log in ViewBag.SonIslemler)
+            {
+                <div class="log-line">
+                    [@DateTime.Now.ToString("HH:mm")] > @log.Metin // DURUM: İŞLENDİ
+                </div>
+            }
+        }
+        <div class="log-line" style="opacity:0.4;">[@DateTime.Now.ToString("HH:mm")] > BEKLEMEDE...</div>
+    </div>
+</div>
+
+<script>
+    Chart.defaults.color = '#64748b';
+    Chart.defaults.font.family = 'Rajdhani';
+
+    const ctxBar = document.getElementById('performanceChart').getContext('2d');
+    new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+            labels: @Html.Raw(Json.Serialize(ViewBag.DersAdlari)),
+            datasets: [{
+                data: @Html.Raw(Json.Serialize(ViewBag.DersOrtalamalari)),
+                backgroundColor: 'rgba(0, 243, 255, 0.15)',
+                borderColor: '#00f3ff',
+                borderWidth: 2,
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true, max: 100, grid: { color: 'rgba(255,255,255,0.05)' } },
+                x: { grid: { display: false } }
+            },
+            plugins: { legend: { display: false } }
+        }
+    });
+
+    const ctxDoughnut = document.getElementById('systemChart').getContext('2d');
+    new Chart(ctxDoughnut, {
+        type: 'doughnut',
+        data: {
+            labels: ['Öğrenciler', 'Hocalar', 'Dersler', 'Bölümler'],
+            datasets: [{
+                data: [@ViewBag.OgrenciSayisi, @ViewBag.HocaSayisi, @ViewBag.DersSayisi, @ViewBag.BolumSayisi],
+                backgroundColor: ['#00f3ff', '#ff00ff', '#ffaa00', '#6366f1'],
+                borderColor: 'rgba(0,0,0,0.5)',
+                borderWidth: 2,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10 } }
+            },
+            cutout: '70%'
+        }
+    });
+</script>

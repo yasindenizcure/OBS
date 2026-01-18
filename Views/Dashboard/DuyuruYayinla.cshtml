@@ -1,0 +1,70 @@
+﻿@model DenemeDers.Entity.Duyuru
+@{
+    ViewData["Title"] = "Duyuru Sayfası";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .msg-container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: rgba(13, 14, 20, 0.9);
+        border: 1px solid var(--accent);
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
+    }
+    .msg-header {
+        font-family: 'Orbitron';
+        color: var(--accent);
+        font-size: 1rem;
+        margin-bottom: 25px;
+        text-align: center;
+        letter-spacing: 2px;
+    }
+    textarea {
+        width: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff;
+        padding: 15px;
+        border-radius: 8px;
+        font-family: 'Rajdhani';
+        font-size: 1.1rem;
+        min-height: 150px;
+        resize: none;
+        transition: 0.3s;
+    }
+    textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+    }
+    .btn-send {
+        width: 100%;
+        padding: 15px;
+        background: transparent;
+        border: 1px solid var(--accent);
+        color: var(--accent);
+        font-family: 'Orbitron';
+        font-size: 0.8rem;
+        margin-top: 20px;
+        cursor: pointer;
+        transition: 0.4s;
+    }
+    .btn-send:hover {
+        background: var(--accent);
+        color: #000;
+        box-shadow: 0 0 20px var(--accent);
+    }
+</style>
+
+<div class="msg-container">
+    <div class="msg-header">SISTEM GENELI DUYURU YAYINLA</div>
+    <form asp-action="DuyuruYayinla" method="post">
+        <div class="form-group">
+            <textarea asp-for="Icerik" placeholder="Mesajınızı buraya giriniz..." required></textarea>
+        </div>
+        <button type="submit" class="btn-send">DUYURUYU YAYINLA</button>
+    </form>
+</div>

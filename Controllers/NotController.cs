@@ -46,50 +46,95 @@ namespace DenemeDers.Controllers
             return RedirectToAction("NotIndex");
         }
         [HttpGet]
-        public IActionResult NotEkle()
+        public IActionResult NotEkle(int? dersId)
         {
             int hocaId = GetAktifHocaId();
             var hoca = _context.OgretimGorevlileri.FirstOrDefault(x => x.OgretimGorevlisiId == hocaId);
-            if (hoca == null) return Content("Hoca oturumu bulunamadı! Lütfen tekrar giriş yapın.");
-            var bolumundekiOgrenciler = _context.Ogrenciler
-        .Where(x => x.BolumId == hoca.BolumId) // Kritik nokta burası: Bölüm eşleşmesi
-        .Select(s => new {
-            Id = s.OgrenciId,
-            Ad = s.Ad + " " + s.Soyad
-        })
-        .ToList();
 
-
+            // Hocanın girdiği dersler
             var dersler = _context.Dersler.Where(x => x.OgretimGorevlisiId == hocaId).ToList();
+            ViewBag.Dersler = new SelectList(dersler, "DersId", "DersAdi", dersId);
 
-            ViewBag.HocaAdSoyad = hoca.Ad + " " + hoca.Soyad;
+            if (dersId.HasValue)
+            {
+                var secilenDers = _context.Dersler.Find(dersId.Value);
+                var bolumundekiOgrenciler = _context.Ogrenciler
+                    .Where(x => x.BolumId == secilenDers.BolumId) // Dersin bölümü = Öğrencinin bölümü
+                    .Select(s => new { Id = s.OgrenciId, Ad = s.Ad + " " + s.Soyad })
+                    .ToList();
+
+                ViewBag.Ogrenciler = new SelectList(bolumundekiOgrenciler, "Id", "Ad");
+            }
+            else
+            {
+                // Ders seçilmemişse liste boş kalsın
+                ViewBag.Ogrenciler = new SelectList(Enumerable.Empty<SelectListItem>());
+            }
+            ViewBag.Unvan = hoca?.Unvan;
+            ViewBag.HocaAdSoyad = hoca?.Ad + " " + hoca?.Soyad;
             ViewBag.HocaId = hocaId;
-
-            ViewBag.Ogrenciler = new SelectList(bolumundekiOgrenciler, "Id", "Ad");
-            ViewBag.Dersler = new SelectList(dersler, "DersId", "DersAdi");
-
             return View();
         }
 
         [HttpPost]
         public IActionResult NotEkle(Not model)
         {
-            if (model.OgretimGorevlisiId == 0)
+            ModelState.Remove("Ogrenci");
+            ModelState.Remove("Ders");
+            ModelState.Remove("OgretimGorevlisi");
+
+            var varmi = _context.Notlar.Any(x => x.OgrenciId == model.OgrenciId && x.DersId == model.DersId);
+            if (varmi)
             {
-                return Content("Hata: Hoca ID gönderilemedi!");
+                TempData["ErrorMessage"] = "SİSTEM UYARISI: Bu öğrenciye bu dersten daha önce not girilmiş!";
+                NotListeleriniDoldur(model);
+                return View(model);
             }
 
-            try
+            var secilenDers = _context.Dersler.Find(model.DersId);
+            var secilenOgrenci = _context.Ogrenciler.Find(model.OgrenciId);
+
+            if (secilenDers != null && secilenOgrenci != null)
             {
-                _context.Notlar.Add(model);
-                _context.SaveChanges();
-                return RedirectToAction("NotIndex");
-            }
-            catch (System.Exception)
-            {
-                return Content("Veritabanı hatası: Seçtiğiniz hoca veya ders geçersiz!");
+                if (secilenDers.BolumId != secilenOgrenci.BolumId)
+                {
+                    TempData["ErrorMessage"] = "PROTOKOL HATASI: Öğrencinin bölümü ile dersin bölümü uyuşmuyor!";
+                    NotListeleriniDoldur(model);
+                    return View(model);
+                }
             }
 
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Notlar.Add(model);
+                    _context.SaveChanges();
+                    return RedirectToAction("NotIndex");
+                }
+                catch (Exception)
+                {
+                    TempData["ErrorMessage"] = "KRİTİK HATA: Veritabanı kayıt protokolü başarısız!";
+                }
+            }
+
+            NotListeleriniDoldur(model);
+            return View(model);
+        }
+
+        private void NotListeleriniDoldur(Not model)
+        {
+            int hocaId = GetAktifHocaId();
+            var hoca = _context.OgretimGorevlileri.Find(hocaId);
+
+            ViewBag.HocaId = hocaId;
+            ViewBag.HocaAdSoyad = hoca?.Ad + " " + hoca?.Soyad;
+            var tumOgrenciler = _context.Ogrenciler
+                .Select(s => new { Id = s.OgrenciId, Ad = s.Ad + " " + s.Soyad })
+                .ToList();
+
+            ViewBag.Ogrenciler = new SelectList(tumOgrenciler, "Id", "Ad", model.OgrenciId);
+            ViewBag.Dersler = new SelectList(_context.Dersler.Where(x => x.OgretimGorevlisiId == hocaId).ToList(), "DersId", "DersAdi", model.DersId);
         }
         [HttpGet]
         public IActionResult NotGuncelle(int id)

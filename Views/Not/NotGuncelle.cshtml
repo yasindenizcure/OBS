@@ -1,200 +1,127 @@
 ﻿@model DenemeDers.Entity.Not
-
 @{
-    Layout = null;
+    ViewData["Title"] = "Not Güncelleme Paneli";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Not Güncelleme // Akademik Sistem</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    .not-update-container {
+        max-width: 500px;
+        margin: 40px auto;
+        background: rgba(16, 18, 27, 0.8);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        border-radius: 24px;
+        padding: 40px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
 
-    <style>
-        :root {
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --bg-dark: #0f172a;
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.1);
-            --text-muted: #94a3b8;
+    .form-header {
+        border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        text-align: center;
+    }
+
+        .form-header h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #818cf8;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+    .info-tag {
+        display: inline-block;
+        background: rgba(99, 102, 241, 0.1);
+        color: #818cf8;
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-family: 'Orbitron';
+        font-size: 0.7rem;
+        margin-top: 10px;
+        border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+
+    .form-label {
+        display: block;
+        font-family: 'Orbitron';
+        font-size: 0.7rem;
+        color: #64748b;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 16px;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        color: #fff;
+        font-family: inherit;
+        transition: 0.3s;
+    }
+
+        .form-control:focus {
+            border-color: #818cf8;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+            outline: none;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            background-image: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.1) 0px, transparent 50%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #f8fafc;
-            padding: 20px;
+    .btn-cyber-update {
+        width: 100%;
+        padding: 15px;
+        background: #6366f1;
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-family: 'Orbitron';
+        font-weight: bold;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 20px;
+    }
+
+        .btn-cyber-update:hover {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
         }
+</style>
 
-        .update-card {
-            width: 100%;
-            max-width: 500px;
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-            .header h2 {
-                font-family: 'Outfit', sans-serif;
-                font-size: 1.8rem;
-                color: #fff;
-                margin-bottom: 10px;
-            }
-
-            .header p {
-                font-size: 0.9rem;
-                color: var(--text-muted);
-            }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-            .form-group label {
-                display: block;
-                font-size: 0.85rem;
-                color: #cbd5e1;
-                margin-bottom: 8px;
-                margin-left: 4px;
-            }
-
-        .input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-            .input-wrapper i {
-                position: absolute;
-                left: 16px;
-                color: #64748b;
-            }
-
-        input, select {
-            width: 100%;
-            padding: 12px 16px 12px 45px;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            color: #fff;
-            font-family: inherit;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-
-            /* Readonly (değiştirilemez) alanlar için stil */
-            input[readonly] {
-                background: rgba(255, 255, 255, 0.02);
-                color: #64748b;
-                cursor: not-allowed;
-            }
-
-            input:focus {
-                outline: none;
-                border-color: var(--primary);
-                box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-            }
-
-        .btn-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .btn {
-            padding: 12px;
-            border-radius: 12px;
-            font-family: 'Outfit', sans-serif;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-            text-decoration: none;
-            font-size: 0.95rem;
-        }
-
-        .btn-save {
-            background: var(--primary);
-            border: none;
-            color: white;
-        }
-
-            .btn-save:hover {
-                background: var(--primary-hover);
-                transform: translateY(-1px);
-            }
-
-        .btn-cancel {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
-            color: #fff;
-        }
-
-            .btn-cancel:hover {
-                background: rgba(255, 255, 255, 0.1);
-            }
-    </style>
-</head>
-<body>
-
-    <div class="update-card">
-        <div class="header">
-            <h2>Not Güncelle</h2>
-            <p>Öğrenci başarısını yeniden değerlendirin.</p>
-        </div>
-
-        <form method="post">
-            @Html.HiddenFor(x => x.NotId)
-            @Html.HiddenFor(x => x.OgrenciId)
-            @Html.HiddenFor(x => x.DersId)
-            @Html.HiddenFor(x => x.OgretimGorevlisiId)
-
-            <div class="form-group">
-                <label>Vize Notu</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-pen-clip"></i>
-                    <input type="number" name="VizeNotu" value="@Model.VizeNotu" min="0" max="100" required />
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Final Notu</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-graduation-cap"></i>
-                    <input type="number" name="FinalNotu" value="@Model.FinalNotu" min="0" max="100" required />
-                </div>
-            </div>
-
-            <div class="btn-group">
-                <a href="/Not/NotIndex" class="btn btn-cancel">İptal Et</a>
-                <button type="submit" class="btn btn-save">Değişiklikleri Kaydet</button>
-            </div>
-        </form>
+<div class="not-update-container">
+    <div class="form-header">
+        <h2>Not Güncelleme Paneli</h2>
     </div>
 
-</body>
-</html>
+    <form method="post">
+        @Html.HiddenFor(x => x.NotId)
+        @Html.HiddenFor(x => x.OgrenciId)
+        @Html.HiddenFor(x => x.DersId)
+        @Html.HiddenFor(x => x.OgretimGorevlisiId)
+
+        <div class="form-group" style="margin-bottom: 20px;">
+            <label class="form-label">ÖGRENCI</label>
+            <input type="text" class="form-control" value="@Model.Ogrenci?.Ad @Model.Ogrenci?.Soyad" readonly />
+        </div>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+            <label class="form-label">Ders</label>
+            <input type="text" class="form-control" value="@Model.Ders?.DersAdi" readonly />
+        </div>
+
+        <div style="display:flex; gap:15px;">
+            <div class="form-group" style="flex:1">
+                <label class="form-label">VIZE NOTU</label>
+                <input type="number" name="VizeNotu" class="form-control" value="@Model.VizeNotu" min="0" max="100" required />
+            </div>
+            <div class="form-group" style="flex:1">
+                <label class="form-label">FINAL NOTU</label>
+                <input type="number" name="FinalNotu" class="form-control" value="@Model.FinalNotu" min="0" max="100" required />
+            </div>
+        </div>
+
+        <button type="submit" class="btn-cyber-update">DEGISIKLIKLERI KAYDET</button>
+        <a href="/Not/NotIndex" style="display:block; text-align:center; margin-top:15px; color:#64748b; text-decoration:none; font-size:11px; font-family:'Orbitron'">IPTAL ET VE GERI DÖN</a>
+    </form>
+</div>
