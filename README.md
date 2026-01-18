@@ -1,9 +1,11 @@
 Okul Bilgi Sistemi ya da kısaca OBS, Web Tabanlı Programlama dersi için geliştirilmiş, üniversitelerde yönetici ve akademisyenlerin öğrenci süreçlerini uçtan uca yönetmesi amacıyla yapılmış, cyberpunk temalı şık bir ASP.NET Core MVC web uygulamasıdır.
 
 🚀 Proje Amacı
+
 Bu proje, bir üniversite veya okul ortamındaki öğrenci kayıtlarını, akademik kadro yönetimini ve not sistemini dijital ortama taşıyarak web sayfası üzerinden kontrol etmeyi amaçlar. Özellikle görselleştirilmiş veriler (Dashboard) ile sistemin anlık durumunu izlemeyi kolaylaştırır.
 
 🎯 Hedef Kullanıcı Kitlesi
+
 Sistem Yöneticisi (Admin): Tüm sisteme hakim, yeni bölümler, yeni hocalar, duyurular ve yeni öğrenciler ekleyebilen kullanıcı. Öğrencilere not ekleyemez.
 
 Bölüm memuru (Memur): Duyuru-bölüm ve kullanıcı kısımlarına karışamaz. Diğer tüm işlemleri yapabilir. 
