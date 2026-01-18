@@ -1,4 +1,4 @@
-Okul Bilgi Sistemi yada kısaca OBS, Web Tabanlı Programlama dersi için geliştirilmiş, üniversitelerde yönetici ve akademisyenlerin öğrenci süreçlerini uçtan uca yönetmesi amacıyla yapılmış, cyberpunk temalı şık bir ASP.NET Core MVC web uygulamasıdır.
+Okul Bilgi Sistemi ya da kısaca OBS, Web Tabanlı Programlama dersi için geliştirilmiş, üniversitelerde yönetici ve akademisyenlerin öğrenci süreçlerini uçtan uca yönetmesi amacıyla yapılmış, cyberpunk temalı şık bir ASP.NET Core MVC web uygulamasıdır.
 
 🚀 Proje Amacı
 Bu proje, bir üniversite veya okul ortamındaki öğrenci kayıtlarını, akademik kadro yönetimini ve not sistemini dijital ortama taşıyarak web sayfası üzerinden kontrol etmeyi amaçlar. Özellikle görselleştirilmiş veriler (Dashboard) ile sistemin anlık durumunu izlemeyi kolaylaştırır.
@@ -9,6 +9,7 @@ Sistem Yöneticisi (Admin): Tüm sisteme hakim, yeni bölümler, yeni hocalar, d
 Bölüm memuru (Memur): Duyuru-bölüm ve kullanıcı kısımlarına karışamaz. Diğer tüm işlemleri yapabilir. 
 
 Akademisyenler: Kendilerine atanan derslere not girişi yapabilen ve kendi öğrencilerini takip edebilen kullanıcılar. Sistemde herhangi bir değişiklik yapamazlar.
+
 ------------------------------------
 🛠 Kullanılan Teknolojiler
 Dil: C#
@@ -24,6 +25,7 @@ Frontend: HTML5, CSS3, JavaScript, Chart.js (Grafikler için)
 Güvenlik: BCrypt.Net-Next (Şifre Hashleme ve Güvenli Depolama)
 
 Kütüphaneler: FontAwesome (İkonlar için), Google Fonts (Orbitron & Rajdhani)
+
 ------------------------------------
 📖 Senaryo ve Kullanım Amacı
 Uygulama başlatıldığında cyberpunk temalı bir Dashboard ekranı kullanıcıyı karşılar.
