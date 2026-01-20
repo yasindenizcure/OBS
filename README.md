@@ -1,7 +1,6 @@
-# 🌌 Okul Bilgi Sistemi (OBS) - Cyberpunk Edition
+# 🌌 Okul Bilgi Sistemi (OBS)
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" alt="Maintained">
   <img src="https://img.shields.io/badge/Framework-ASP.NET%20Core%20MVC%208-blueviolet" alt="Framework">
   <img src="https://img.shields.io/badge/Database-MSSQL%20Server-red" alt="Database">
 </p>
