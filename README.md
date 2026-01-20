@@ -1,51 +1,66 @@
-Yasin Deniz Cüre 132230035
+# 🌌 Okul Bilgi Sistemi (OBS) - Cyberpunk Edition
 
-Okul Bilgi Sistemi ya da kısaca OBS, Web Tabanlı Programlama dersi için geliştirilmiş, üniversitelerde yönetici ve akademisyenlerin öğrenci süreçlerini uçtan uca yönetmesi amacıyla yapılmış, cyberpunk temalı şık bir ASP.NET Core MVC web uygulamasıdır.
+<p align="center">
+  <img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" alt="Maintained">
+  <img src="https://img.shields.io/badge/Framework-ASP.NET%20Core%20MVC%208-blueviolet" alt="Framework">
+  <img src="https://img.shields.io/badge/Database-MSSQL%20Server-red" alt="Database">
+</p>
 
-🚀 Proje Amacı
+**Geliştirici:** Yasin Deniz Cüre  
+**Öğrenci No:** 132230035
 
-Bu proje, bir üniversite veya okul ortamındaki öğrenci kayıtlarını, akademik kadro yönetimini ve not sistemini dijital ortama taşıyarak web sayfası üzerinden kontrol etmeyi amaçlar. Özellikle görselleştirilmiş veriler (Dashboard) ile sistemin anlık durumunu izlemeyi kolaylaştırır.
+---
 
-🎯 Hedef Kullanıcı Kitlesi
+## 🚀 Proje Hakkında
 
-Sistem Yöneticisi (Admin): Tüm sisteme hakim, yeni bölümler, yeni hocalar, duyurular ve yeni öğrenciler ekleyebilen kullanıcı. Öğrencilere not ekleyemez.
+**Okul Bilgi Sistemi (OBS)**, Web Tabanlı Programlama dersi için geliştirilmiş; üniversitelerde yönetici ve akademisyenlerin öğrenci süreçlerini uçtan uca yönetmesi amacıyla tasarlanmış, **cyberpunk temalı** şık bir ASP.NET Core MVC web uygulamasıdır.
 
-Bölüm memuru (Memur): Duyuru-bölüm ve kullanıcı kısımlarına karışamaz. Diğer tüm işlemleri yapabilir. 
+Bu proje, akademik süreçleri dijital ortama taşıyarak merkezi bir kontrol mekanizması sunar. Özellikle görselleştirilmiş veriler (**Dashboard**) ile sistemin anlık durumunu izlemeyi kolaylaştırır.
 
-Akademisyenler: Kendilerine atanan derslere not girişi yapabilen ve kendi öğrencilerini takip edebilen kullanıcılar. Sistemde herhangi bir değişiklik yapamazlar.
+---
 
-------------------------------------
-🛠 Kullanılan Teknolojiler
+## 🎯 Hedef Kullanıcı Kitlesi ve Yetkiler
 
-Dil: C#
+| Rol | Yetki Açıklaması |
+| :--- | :--- |
+| **🕹️ Sistem Yöneticisi** | Tüm sisteme hakimdir. Bölüm, hoca, duyuru ve öğrenci ekleyebilir. (Not girişi yapamaz). |
+| **📂 Bölüm Memuru** | Operasyonel süreçleri yönetir. Duyuru, bölüm ve kullanıcı yönetimi hariç tüm işlemleri yapabilir. |
+| **🎓 Akademisyen** | Sadece kendine atanan derslere not girişi yapabilir ve öğrencilerini takip edebilir. |
+| **👤 Öğrenci** | Sadece kendi notlarını görüntüleyebilir; sistemin diğer kısımlarına erişimi yoktur. |
 
-Framework: ASP.NET Core MVC 8
+---
 
-ORM: EF Core (Code First)
+## 🛠 Kullanılan Teknolojiler
 
-Veritabanı: MSSQL Server
+### **Backend & Veritabanı**
+* **Dil:** C#
+* **Framework:** ASP.NET Core MVC 8
+* **ORM:** EF Core (Code First)
+* **Veritabanı:** MSSQL Server
+* **Güvenlik:** BCrypt.Net-Next (Şifre Hashleme)
 
-Frontend: HTML5, CSS3, JavaScript, Chart.js (Grafikler için)
+### **Frontend**
+* **Tasarım:** HTML5, CSS3, JavaScript
+* **Grafikler:** Chart.js (Başarı ortalamaları ve istatistikler)
+* **İkon & Font:** FontAwesome, Google Fonts (Orbitron & Rajdhani)
 
-Güvenlik: BCrypt.Net-Next (Şifre Hashleme ve Güvenli Depolama)
+---
 
-Kütüphaneler: FontAwesome (İkonlar için), Google Fonts (Orbitron & Rajdhani)
+## 📖 Senaryo ve Kullanım Amacı
 
-------------------------------------
-📖 Senaryo ve Kullanım Amacı
+* **Dashboard:** Toplam öğrenci, hoca ve ders sayıları dinamik olarak listelenir. Chart.js ile ders başarı ortalamaları grafiksel olarak sunulur.
+* **Öğrenci Yönetimi:** Yeni kayıt, bölüme göre listeleme ve güncelleme işlemleri yapılır.
+* **Akademik Kadro:** Hocaların unvan ve bölümlerine göre yönetildiği modüldür.
+* **Not Giriş Terminali:** Hocalar, sistemin otomatik ders-bölüm denetimi altında sadece yetkili oldukları öğrencilere not girişi yapar.
+* **Öğrenci Giriş Terminali:** Öğrencilerin kendi kimlik bilgileriyle sadece kişisel notlarını görebildiği paneldir.
 
-Uygulama başlatıldığında cyberpunk temalı bir Dashboard ekranı kullanıcıyı karşılar.
+---
 
-Dashboard: Toplam öğrenci, hoca ve ders sayıları dinamik olarak listelenir. Chart.js ile ders başarı ortalamaları grafiksel olarak sunulur.
+## 🎥 Tanıtım Videosu
 
-Öğrenci Yönetimi: Yeni öğrenci kayıtları yapılır, mevcut öğrenciler bölümlerine göre listelenir ve güncellenir.
+Projenin çalışma şeklini ve arayüz detaylarını aşağıdaki linkten izleyebilirsiniz:
 
-Akademik Kadro: Hocaların unvanlarına ve bölümlerine göre yönetildiği alandır.
+[▶️ Proje Tanıtımını İzle](https://www.youtube.com/watch?v=jHpkXPkxJnQ)
 
-Not Giriş Terminali: Hocalar, sadece kendi derslerinin bağlı olduğu bölümlerdeki öğrencilere not girişi yapabilir. Sistem, ders-bölüm uyumunu otomatik denetler.
-
-Öğrenci Giriş Terminali: Öğrenci sadece kendi id ve şifresini girerek kendisine sistemden verilen notları görebilir. Diğer kısımlara ulaşamaz.
-
-------------------------------------
-🎥 Tanıtım Videosu
-https://www.youtube.com/watch?v=jHpkXPkxJnQ
+---
+<p align="center">© 2024 Yasin Deniz Cüre - Web Tabanlı Programlama Projesi</p>
