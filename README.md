@@ -59,6 +59,3 @@ Bu proje, akademik süreçleri dijital ortama taşıyarak merkezi bir kontrol me
 Projenin çalışma şeklini ve arayüz detaylarını aşağıdaki linkten izleyebilirsiniz:
 
 [▶️ Proje Tanıtımını İzle](https://www.youtube.com/watch?v=jHpkXPkxJnQ)
-
----
-<p align="center">© 2024 Yasin Deniz Cüre - Web Tabanlı Programlama Projesi</p>
