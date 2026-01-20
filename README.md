@@ -5,8 +5,7 @@
   <img src="https://img.shields.io/badge/Database-MSSQL%20Server-red" alt="Database">
 </p>
 
-**Geliştirici:** Yasin Deniz Cüre  
-**Öğrenci No:** 132230035
+Yasin Deniz Cüre  132230035
 
 ---
 
