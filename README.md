@@ -1,3 +1,5 @@
+Yasin Deniz Cüre 132230035
+
 Okul Bilgi Sistemi ya da kısaca OBS, Web Tabanlı Programlama dersi için geliştirilmiş, üniversitelerde yönetici ve akademisyenlerin öğrenci süreçlerini uçtan uca yönetmesi amacıyla yapılmış, cyberpunk temalı şık bir ASP.NET Core MVC web uygulamasıdır.
 
 🚀 Proje Amacı
